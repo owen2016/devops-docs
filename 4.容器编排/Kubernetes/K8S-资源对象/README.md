@@ -28,6 +28,8 @@
 
 ## 资源类型缩写
 
+- Use `kubectl api-resources` for a complete list of supported resources.
+
 下表列出的是 kubernetes 中所有支持的类型和缩写的别名
 
 |资源类型|缩写别名|

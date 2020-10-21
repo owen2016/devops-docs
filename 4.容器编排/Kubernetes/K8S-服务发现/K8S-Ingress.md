@@ -1,5 +1,7 @@
 # k8s- Nginx-Ingress
 
+- https://stackoverflow.com/questions/50966300/whats-the-difference-between-exposing-nginx-as-load-balancer-vs-ingress-control
+
 ## 介绍
 
 Ingress本质是通过http代理服务器将外部的http请求转发到集群内部的后端服务。

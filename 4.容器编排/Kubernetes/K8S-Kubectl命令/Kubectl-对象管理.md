@@ -182,7 +182,7 @@ $ kubectl get pods -o json | jq '.items[].spec.containers[].env[]?.valueFrom.sec
 
 rolling update：可以使得服务近乎无缝地平滑升级，即在不停止对外服务的前提下完成应用的更新。如果在升级过程中，发现有问题还可以中途停止update，并回滚到前面版本
 
-Manage the rollout of a resource. Valid resource types include: deployments /daemonsets /statefulsets
+Manage the rollout of a resource. Valid resource types include: `deployments /daemonsets /statefulsets`
 
 ```shell
 kubectl rollout SUBCOMMAND [options]
