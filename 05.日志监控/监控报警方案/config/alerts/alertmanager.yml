@@ -1,11 +1,11 @@
 global:
   resolve_timeout: 5m
-  smtp_from: owenli@augmentum.com.cn
-  smtp_smarthost: mail2.augmentum.com.cn:25
-  smtp_auth_username: owenli@augmentum.com.cn
+  smtp_from: owenli@devopsing.site
+  smtp_smarthost: mail2.devopsing.site:25
+  smtp_auth_username: owenli@devopsing.site
   smtp_auth_password: abc123_
   smtp_require_tls: false
-  smtp_hello: 'augmentum.com.cn'
+  smtp_hello: 'devopsing.site'
   # 企业号企业ID
   wechat_api_corp_id: 'wwae5264748df759e9'
   # 企业号应用SECRET
@@ -28,7 +28,7 @@ route:
 receivers:
 - name: 'email'
   email_configs:
-  - to: 'owenli@augmentum.com.cn'
+  - to: 'owenli@devopsing.site'
     html: '{{ template "email.to.html" . }}'
     headers: { Subject: '{{ template "email.to.title" . }}'}
     send_resolved: true

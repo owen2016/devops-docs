@@ -28,7 +28,7 @@ Kubernetes Dashboard 是 k8s集群的一个 WEB UI管理工具
 
 ### 3. 安装 dashboard
 
-下载修改过的[k8s-dashboard.yaml](https://git.augmentum.com.cn/aug-ops/devops/-/blob/master/k8s/k8s-dashboard.yaml), 执行如下命令
+下载修改过的[k8s-dashboard.yaml](https://git.devopsing.site/devops/-/blob/master/k8s/k8s-dashboard.yaml), 执行如下命令
 
 `kubectl apply -f k8s-dashboard.yaml`
 

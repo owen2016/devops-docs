@@ -1,0 +1,9 @@
+[{
+    "targets": [
+        "https://www.baidu.com",
+        "http://www.devopsing.site"
+    ],
+    "labels": {
+        "env": "website"
+    }
+}]

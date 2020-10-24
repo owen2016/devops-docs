@@ -36,13 +36,6 @@ jenkins默认的权限管理体系不支持用户组或角色的配置，这里�
 
 <font color='#ff0000'>这里强制规定群硕项目role配置规则和流程</font>
 
-####  规则
-
-1. 所有AugOps team成员都是 augops role（默认），可以管理整个jenkins (admin role暂时不使用)
-2. 所有@DevTeam成员都是 others roles, 默认只有只读权限
-3. 配置LADP之后，默认所有augmentum成员只能登录jenkins
-4. AugOps team成员<font color='#ff0000'>禁止</font>随意改变Configure Global Security配置页下的授权策略,容易导致自己都登录不了
-
 #### 3.1 为@DevTeam添加 project role
 
 以“mc”项目为例，添加manager和user两种role

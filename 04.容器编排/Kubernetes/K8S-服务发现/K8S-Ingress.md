@@ -69,4 +69,4 @@ spec:
 
 ## Ingress Controller 部署
 
-示例 - <https://git.augmentum.com.cn/aug-ops/devops/-/tree/master/k8s/ingress-nginx>
+示例 - <ingress-nginx>

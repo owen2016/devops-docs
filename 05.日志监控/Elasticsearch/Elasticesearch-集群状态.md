@@ -94,7 +94,7 @@ ES中没有直接删除分片的接口，除非整个节点数据已不再使用
 ``` json
 curl -XGET 'http://localhost:9200/_settings?pretty'
 {
-  "aug-config-2020.09.10" : {
+  "ops-config-2020.09.10" : {
     "settings" : {
       "index" : {
         "creation_date" : "1599696116279",
@@ -104,7 +104,7 @@ curl -XGET 'http://localhost:9200/_settings?pretty'
         "version" : {
           "created" : "6081199"
         },
-        "provided_name" : "aug-config-2020.09.10"
+        "provided_name" : "ops-config-2020.09.10"
       }
     }
   }
@@ -190,7 +190,7 @@ curl -XPUT 'http://localhost:9200/_settings' -H 'content-Type:application/json' 
 
 ```json
 {
-  "index" : "aug-database-2020.08.28",
+  "index" : "ops-database-2020.08.28",
   "shard" : 1,
   "primary" : false,
   "current_state" : "unassigned",
@@ -217,7 +217,7 @@ curl -XPUT 'http://localhost:9200/_settings' -H 'content-Type:application/json' 
         {
           "decider" : "same_shard",
           "decision" : "NO",
-          "explanation" : "the shard cannot be allocated to the same node on which a copy of the shard already exists [[aug-database-2020.08.28][1], node[iK83cGqrQNiY8vCPiUIhoA], [P], s[STARTED], a[id=HVK1QMJGRkuHDq6m71O_Ew]]"
+          "explanation" : "the shard cannot be allocated to the same node on which a copy of the shard already exists [[ops-database-2020.08.28][1], node[iK83cGqrQNiY8vCPiUIhoA], [P], s[STARTED], a[id=HVK1QMJGRkuHDq6m71O_Ew]]"
         }
       ]
     }

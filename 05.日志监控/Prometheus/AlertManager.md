@@ -37,7 +37,7 @@ silences报警机制可以通过Alertmanager的Web页面进行配置。
 
 ## AlertManager配置
 
-[参考 alertmanager.yml](http://git.augmentum.com.cn/AugCI/knowledgebase/blob/master/%E7%9B%91%E6%8E%A7/Prometheus/config/alertmanager.yml)
+[参考 alertmanager.yml](http://git.devopsing.site/AugCI/knowledgebase/blob/master/%E7%9B%91%E6%8E%A7/Prometheus/config/alertmanager.yml)
 
 - 全局配置
 - 分组

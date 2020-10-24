@@ -54,8 +54,6 @@ Jenkins可以存储以下类型的credentials:
 
 - 为了便于管理和使用， 这里使用使用统一的约定来指定credential ID
 
-- 原则上， @AugOpsTeam 成员不能随意创建 credential ID, 经过讨论后统一创建新的ID
-
 - 建议使用类似下面的format做为credential ID， 便于jenkinsfile开发时直接使用，同时在”描述“里写清楚credential的作用
 
     **gitlab-api-token、gitlab-private-key、gitlab-userpwd-pair、harbor-xxx-xxx**

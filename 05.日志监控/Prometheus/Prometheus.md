@@ -114,7 +114,7 @@ scrape_samples_scraped{job="<job-name>", instance="<instance-id>"}  表示从该
 
 ## Prometheus 配置
 
-- [配置文件-prometheus.yml](http://git.augmentum.com.cn/AugCI/knowledgebase/blob/master/%E7%9B%91%E6%8E%A7/Prometheus/config/prometheus.yml)
+- [配置文件-prometheus.yml](http://git.devopsing.site/AugCI/knowledgebase/blob/master/%E7%9B%91%E6%8E%A7/Prometheus/config/prometheus.yml)
 
 ### 全局配置
 

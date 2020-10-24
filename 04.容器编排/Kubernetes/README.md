@@ -28,4 +28,4 @@ K8s 是将8个字母 “ubernete” 替换为 “8” 的缩写，后续我们�
 
 搭建完k8s集群后，可以使用该示例体会 Kubernetes 的使用
 
-- <https://git.augmentum.com.cn/aug-ops/devops/-/tree/master/k8s/k8s-demo>
+- <k8s-demo>
