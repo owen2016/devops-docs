@@ -1,4 +1,4 @@
-# [漫话DevOps]- Agile, CI/CD, DevOps
+# Agile, CI/CD, DevOps
 
 随着DevOps理念的普及与扩散，可能会被一大堆名字概念搞的莫名其妙，理清它们之间的关系可以帮助团队知道DevOps如何落地，改善工作流程。
 
