@@ -13,11 +13,11 @@ SEO（Search Engine Optimization）：汉译为搜索引擎优化。是一种方
 
 常见的搜索引擎链接提交入口，是新网站通知搜索引擎抓取的最佳通常。
 
-百度链接提交入口 http://zhanzhang.baidu.com/linksubmit/url
-Google网站登录口：https://www.google.com/webmasters/tools/submit-url
-360搜索引擎登录入口：http://info.so.360.cn/site_submit.html
-搜狗网站收录提交入口:http://www.sogou.com/feedback/urlfeedback.php
-必应网站提交登录入口：http://www.bing.com/toolbox/submit
+- 百度链接提交入口 http://zhanzhang.baidu.com/linksubmit/url
+- Google网站登录口：https://www.google.com/webmasters/tools/submit-url
+- 360搜索引擎登录入口：http://info.so.360.cn/site_submit.html
+- 搜狗网站收录提交入口:http://www.sogou.com/feedback/urlfeedback.php
+- 必应网站提交登录入口：http://www.bing.com/toolbox/submit
 
 ## 提交百度收录
 
@@ -76,6 +76,7 @@ path: baidusitemap.xml
 - <https://hui-wang.info/2016/10/23/Hexo%E6%8F%92%E4%BB%B6%E4%B9%8B%E7%99%BE%E5%BA%A6%E4%B8%BB%E5%8A%A8%E6%8F%90%E4%BA%A4%E9%93%BE%E6%8E%A5/>
 
 1. 首先，在Hexo根目录下，安装本插件：
+
 `npm install hexo-baidu-url-submit --save`
 
 2. 然后，同样在根目录下，把以下内容配置到_config.yml文件中:
@@ -151,7 +152,3 @@ deploy:
 已经在使用链接提交里的API推送（或sitemap）的网站还需要再部署自动推送代码吗？
 
 二者之间互不冲突，互为补充。已经使用API推送的站点，依然可以部署自动推送的JS代码，二者一起使用。
-
-## 参考
-
-- <https://ziyuan.baidu.com/college/courseinfo?id=267&page=1>
