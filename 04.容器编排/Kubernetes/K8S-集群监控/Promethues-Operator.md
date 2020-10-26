@@ -1,6 +1,5 @@
 # Promethues Operator
 
-
 ## 架构
 
 ![](https://gitee.com/owen2016/pic-hub/raw/master/pics/20201022224408.png)
