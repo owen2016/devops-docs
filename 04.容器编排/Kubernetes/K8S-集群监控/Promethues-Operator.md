@@ -1,5 +1,11 @@
 # Promethues Operator
 
+Promethues Operator可以让我们更加方便的去使用 Prometheus，而不需要直接去使用最原始的一些资源对象，比如 Pod、Deployment，随着 Prometheus Operator 项目的成功，CoreOS 公司开源了一个比较厉害的工具：Operator Framework，该工具可以让开发人员更加容易的开发 Operator 应用。
+
+Operator 是由 CoreOS 开发的，用来扩展 Kubernetes API，特定的应用程序控制器，它用来创建、配置和管理复杂的有状态应用，如数据库、缓存和监控系统。Operator 基于 Kubernetes 的资源和控制器概念之上构建，但同时又包含了应用程序特定的领域知识。`创建Operator 的关键是CRD（自定义资源）的设计。`
+
+Kubernetes 1.7 版本以来就引入了自定义控制器的概念，该功能可以让开发人员扩展添加新功能，更新现有的功能，并且可以自动执行一些管理任务，这些自定义的控制器就像 Kubernetes 原生的组件一样，Operator 直接使用 Kubernetes API进行开发，也就是说他们可以根据这些控制器内部编写的自定义规则来监控集群、更改 Pods/Services、对正在运行的应用进行扩缩容。
+
 ## 架构
 
 ![](https://gitee.com/owen2016/pic-hub/raw/master/pics/20201022224408.png)
@@ -23,3 +29,14 @@
 - Alertmanager： Alertmanager 也是一个`自定义资源类型`，可以把 Alertmanager 看作是一种特殊的 Deployment,由 Operator 根据资源描述内容来部署 Alertmanager 集群。
 
 ![](https://gitee.com/owen2016/pic-hub/raw/master/pics/20201022230624.png)
+
+
+### Prometheus Operator vs. kube-prometheus vs. community helm chart
+
+- prometheus operator使用kubernetes原生的方式来管理和操作prometheus和alertmanager集群。
+- kube-prometheus 联合prometheus operator和一些manifests来帮助监控kubernetes集群本身以及跑在kubernetes上面的应用。
+- stable/prometheus-operator Helm chart 提供简单的功能集来创建kube-prometheus。
+
+
+为了方便操作，coreos 提供了 prometheus-operator 这样一个产品，它包装了 Prometheus，并且还提供了四个自定义的 k8s 类型（CustomResourceDefinitions），让你通过定义 manifest 的方式还完成新监控（job）以及告警规则的添加，而无需手动操作 Prometheus 的配置文件，让整个过程更 k8s。
+并且在此基础之上，coreos 还有推出了 kube-prometheus 这样的升级版，它在 prometheus-operator 的基础之上高可用了 Prometheus 和 Alertmanager，提供了 node-exporter 用于宿主机的监控，还有 Kubernetes Metrics APIs 的 Prometheus 适配器和 grafana，让你实现一键部署。
