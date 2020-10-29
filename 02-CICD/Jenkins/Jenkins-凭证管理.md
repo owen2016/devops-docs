@@ -4,6 +4,8 @@
 
 许多三方网站和应用可以与Jenkins交互，如Artifact仓库，基于云的存储系统和服务等. 在Jenkins中添加/配置credentials，Pipeline项目就可以使用 credentials 与三方应用交互
 
+![](https://gitee.com/owen2016/pic-hub/raw/master/material/jenkins.jpg)
+
 ## Credential 类型
 
 参考： <https://jenkins.io/zh/doc/book/using/using-credentials/>
@@ -120,15 +122,13 @@
 
 - 如下所示，将凭证使用统一的ID命名之后，便于复用，凭证定义一次，可多次，多个地方统一使用，无论是后期维护，复用都非常方便！
 
-    ``` shell
+    ``` 
         environment {
             // HARBOR="harbor.devopsing.site"
             HARBOR_ACCESS_KEY = credentials('harbor-userpwd-pair')
             SERVER_ACCESS_KEY = credentials('deploy-userpwd-pair')
                 }
         .....
-
         docker login --username=${HARBOR_ACCESS_KEY_USR} --password=${HARBOR_ACCESS_KEY_PSW} ${HARBOR}
-
         sshpass -p "${SERVER_ACCESS_KEY_PSW}" ssh -o StrictHostKeyChecking=no ${SERVER_ACCESS_KEY_USR}@${DEPLOY_SERVER} "$runCmd"
     ```
