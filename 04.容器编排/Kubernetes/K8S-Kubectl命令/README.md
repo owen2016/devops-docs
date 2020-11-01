@@ -1,6 +1,8 @@
 # Kubectl 命令
 
-Kubernetes提供的kubectl命令是与集群交互最直接的方式，必须掌握！
+Kubectl是Kubernetes的命令行工具，用于控制Kubernetes集群管理器。通过利用kubectl的各种命令可以实现各种功能
+
+- <https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands>
 
 **文档参考：**
 

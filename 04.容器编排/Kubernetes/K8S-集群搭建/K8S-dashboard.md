@@ -2,7 +2,7 @@
 
 [TOC]
 
-Kubernetes Dashboard 是 k8s集群的一个 WEB UI管理工具
+Kubernetes Dashboard 是 k8s集群的一个 WEB UI管理工具. 通过基于Web的仪表板，你可以将容器化应用程序部署到Kubernetes集群并进行故障排除。部署完后，你还可以完整地管理群集及其所有资源。
 
 - https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/
 
