@@ -4,7 +4,7 @@
 
 Kubernetes Dashboard 是 k8s集群的一个 WEB UI管理工具. 通过基于Web的仪表板，你可以将容器化应用程序部署到Kubernetes集群并进行故障排除。部署完后，你还可以完整地管理群集及其所有资源。
 
-- https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/
+- <https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/>
 
 ## 安装 k8s-dashboard
 
@@ -65,10 +65,10 @@ metadata:
   name: admin-user
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
+  kind: ClusterRole # 角色
   name: cluster-admin
 subjects:
-- kind: ServiceAccount
+- kind: ServiceAccount  # 主体
   name: admin-user
   namespace: kubernetes-dashboard
 ```
