@@ -4,17 +4,19 @@
 
 RBAC基于角色的访问控制--Role-Based Access Control
 
+- <https://kubernetes.io/docs/reference/access-authn-authz/rbac/>
+
 ## 概念
 
 - RBAC
-RBAC是kubernetes的一种认证访问授权机制，【不授权就没有资格访问K8S的资源】
+    RBAC是kubernetes的一种认证访问授权机制，【不授权就没有资格访问K8S的资源】
 
-要使用RBAC授权模式，需要在API Server的启动参数中加上--authorization-mode=RBAC
+    要使用RBAC授权模式，需要在API Server的启动参数中加上--authorization-mode=RBAC
 
-RBAC引入了4个新的顶级资源对象：Role、ClusterRole、RoleBinding、ClusterRoleBinding，同其他API资源对象一样，用户可以使用kubectl或者API调用等方式操作这些资源对象
+    RBAC引入了4个新的顶级资源对象：Role、ClusterRole、RoleBinding、ClusterRoleBinding，同其他API资源对象一样，用户可以使用kubectl或者API调用等方式操作这些资源对象
 
 - 主体（subjects）
-  K8S有两种用户：User和Service Account。其中，User给人用，Service Account给进程用，让进程有相关权限。如Dashboard就是一个进程，我们就可以创建一个Service Account给它
+  K8S有两种用户：`User`和`Service Account`。其中，User给人用，Service Account给进程用，让进程有相关权限。如Dashboard就是一个进程，我们就可以创建一个Service Account给它
 
 - 角色(role)
   
@@ -174,7 +176,7 @@ subjects:
 
 ### RoleBinding和ClusterRoleBinding
 
-角色绑定或集群角色绑定用来把一个角色绑定到一个目标上，绑定目标可以是User、Group或者Service Account。使用RoleBinding为某个命名空间授权，ClusterRoleBinding为集群范围内授权
+角色绑定或集群角色绑定用来把一个角色绑定到一个目标上，绑定目标可以是`User、Group或者Service Account`。使用RoleBinding为某个命名空间授权，ClusterRoleBinding为集群范围内授权
 
 **示例如下:**
 
@@ -298,3 +300,197 @@ subjects:
   kind: User
   name: user-1
 ```
+
+## 证书认证+RBAC授权 示例
+
+示例：为kuser用户授权default命名空间Pod读取权限
+
+1. 用K8S CA签发客户端证书 - <https://www.kubernetes.org.cn/1861.html>
+2. 生成kubeconfig授权文件
+3. 创建RBAC权限策略
+
+### 1. 通过CA证书生成自签证书
+
+``` shell
+mkdir  ./kuser
+sh  cert.sh  
+
+## 创建 CA 配置文件
+cat > ca-config.json <<EOF
+{
+  "signing": {
+    "default": {
+      "expiry": "8760h"
+    },
+    "profiles": {
+      "kubernetes": {
+        "usages": [
+            "signing",
+            "key encipherment",
+            "server auth",
+            "client auth"
+        ],
+        "expiry": "8760h"
+      }
+    }
+  }
+}
+EOF
+
+## 创建 CA 证书签名请求
+cat > ca-csr.json <<EOF
+{
+  "CN": "kuser",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "CN",
+      "ST": "BeiJing",
+      "L": "BeiJing",
+      "O": "k8s",
+      "OU": "System"
+    }
+  ]
+}
+EOF
+
+cat > kuser-csr.json <<EOF
+{
+  "CN": "kuser",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "CN",
+      "ST": "BeiJing",
+      "L": "BeiJing",
+      "O": "k8s",
+      "OU": "System"
+    }
+  ]
+}
+EOF
+```
+
+生成 CA 证书和私钥 `cfssl gencert -initca ca-csr.json | cfssljson -bare ca`
+
+上面方案生成ca.pem 和ca-key.pem 可能出现下列问题
+
+``` shell
+user@k8s-master:~/owen-ops/user001$ sudo kubectl get nodes  --kubeconfig=kuser.kubeconfig
+Unable to connect to the server: x509: certificate signed by unknown authority
+```
+
+暂时未解决，使用下面方案直接使用k8s初始化生成的 ca.pem 和ca-key.pem
+
+- .key 转换成 .pem：
+    `openssl rsa -in temp.key -out temp.pem`
+
+    `root@k8s-master:/home/user/# openssl x509 -in /etc/kubernetes/pki/ca.crt -out ca.pem -outform PEM`
+
+- .crt 转换成 .pem：
+
+    `openssl x509 -in tmp.crt -out tmp.pem`
+
+    `root@k8s-master:/home/user/# openssl rsa -in /etc/kubernetes/pki/ca.key -out ca-key.pem -outform PEM`
+
+#### 使用CFSSL自签TLS证书
+
+- CFSSL: Cloudflare's PKI and TLS toolkit  通过命令`apt install golang-cfssl`安装
+
+`cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes kuser-csr.json | cfssljson -bare kuser`
+
+通过指定的ca配置生成 kuser-key.pem  kuser.pem
+
+### 2. 生成kubeconfig授权文件
+
+``` shell
+cd ./kuser
+sh config.sh
+
+kubectl config set-cluster kubernetes \
+  --certificate-authority=ca.pem \
+  --embed-certs=true \
+  --server=https://172.20.249.16:6443 \
+  --kubeconfig=kuser.kubeconfig
+
+# 设置客户端认证
+kubectl config set-credentials kuser \
+  --client-key=kuser-key.pem \
+  --client-certificate=kuser.pem \
+  --embed-certs=true \
+  --kubeconfig=kuser.kubeconfig
+
+# 设置默认上下文
+kubectl config set-context kubernetes \
+  --cluster=kubernetes \
+  --user=kuser \
+  --kubeconfig=kuser.kubeconfig
+
+# 设置当前使用配置
+kubectl config use-context kubernetes --kubeconfig=kuser.kubeconfig
+```
+
+执行 config.sh 生成 kuser.kubeconfig
+
+### 3. 创建RABC授权
+
+``` yaml
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: default
+  name: pod-reader
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+
+---
+
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: read-pods
+  namespace: default
+subjects:
+- kind: User
+  name: kuser
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io
+```
+
+### 4. 验证
+
+如果不指定 kubeconfig 文件的时候发现 查看不了;指定授权后的kubeconfig文件 可以查看你default名称空间下的 pod资源
+
+但是却不能访问非 default 名称空间下的pod，和所有名称空间下的其他资源，因为授权查看的资源只有default名称空间下的pod资源
+
+![kubeconfig-1](./images/kubeconfig-1.png)
+
+### 5. 增加权限验证
+
+根据上面的 `rabc.yaml` 增加resources 列表 查看pod日志和查看service的权限
+
+``` yaml
+rules:
+- apiGroups: [""]
+  resources: ["pods","services"]
+  verbs: ["get", "watch", "list"]
+```
+
+![kubeconfig-2](./images/kubeconfig-2.png)
+
+如何让自定义授权文件成为默认文件？
+
+`cp xxxx.kubeconfig /root/.kube/config`
+
+如果没有 .kube 目录就创建一个，这样就会读取默认配置文件  /root/.kube/config

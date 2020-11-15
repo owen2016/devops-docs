@@ -14,4 +14,4 @@ Kubernetes的存储中有四个重要的概念：`Volume、PersistentVolume(PV)�
 
 - PersistentVolumeClaim。PVC是用户对存储资源PV的请求，根据PVC中指定的条件Kubernetes动态的寻找系统中的PV资源并进行绑定。
 
-- StorageClass
+- StorageClass: 为管理员提供了一种描述他们提供的存储的“类”的方法。 不同的类可能映射到服务质量级别，或备份策略，或者由群集管理员确定的任意策略

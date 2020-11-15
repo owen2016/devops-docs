@@ -2,13 +2,15 @@
 
 [TOC]
 
-**由于k8s部署比较复杂，该文档内容比较多，请耐心阅读，跟着步骤完成操作！**
-
 ---
 
 kubeadm是Kubernetes官方提供的用于快速安装Kubernetes集群的工具，通过将集群的各个组件进行容器化安装管理，通过kubeadm的方式安装集群比二进制的方式安装要方便不少。
 
 安装参考- <https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/>
+
+每一个节点主机上包括master节点都要手动安装并运行docker，同时也都要手动安装并运行kubelet。如果将第一个节点初始化为master节点，在执行初始化这个步骤，其实就是通过kubeadm工具将API Server、etcd、controller-manager、scheduler各组件运行为Pod，也就是跑在docker上。而其他node节点，因已经运行了kubelet、docker组件，剩下的kube-proxy组件也是要运行在Pod上。
+
+kubeadm
 
 ## K8S 组件构成
 

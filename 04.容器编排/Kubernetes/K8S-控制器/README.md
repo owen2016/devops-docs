@@ -4,9 +4,9 @@
 
 Kubernetes中内建了很多controller（控制器），这些相当于一个状态机，用来控制Pod的具体状态和行为
 
-1. deployment：适合`无状态`的服务部署
+1. Deployment：适合`无状态`的服务部署
 
-2. StatefullSet：适合`有状态`的服务部署
+2. StatefulSet：适合`有状态`的服务部署
 
 3. DaemonSet：一次部署，所有的node节点都会部署，例如一些典型的应用场景：
 

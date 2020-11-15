@@ -130,15 +130,14 @@ spec:
 2. 能够提供pv/pvc/storage class的方式使用；
 3. 数据能持久化 - 如果 Pod 被销毁了，hostPath 对应的目录也还会被保留，从这点看，hostPath 的持久性比 emptyDir 强。不过一旦 Host 崩溃，hostPath 也就没法访问了。
 
-### local
+### local (亲和性)
 
-A local volume represents a mounted local storage device such as a disk, partition or directory.
+> A local volume represents a mounted local storage device such as a disk, partition or directory.
+> PersistentVolume nodeAffinity is required when using local volumes. It enables the Kubernetes scheduler to correctly schedule Pods using local volumes to the correct node.
 
 local类型作为静态资源被PersistentVolume使用，不支持Dynamic provisioning。与hostPath相比，因为能够通过PersistentVolume的节点亲和策略 来进行调度，因此比hostPath类型更加适用。local类型也存在一些问题，如果Node的状态异常，那么local存储将无法访问，从而导致Pod运行状态异常。使用这种类型存储的应用必须能够承受可用性的降低、可能的数据丢失等。
 
 对于使用了PV的Pod，Kubernetes会调度到具有对应PV的Node上，因此PV的节点亲和性 nodeAffinity 属性是必须的。
-
-PersistentVolume nodeAffinity is required when using local volumes. It enables the Kubernetes scheduler to correctly schedule Pods using local volumes to the correct node.
 
 ``` yaml
 apiVersion: v1
@@ -155,15 +154,17 @@ spec:
   storageClassName: local-storage
   local:
     path: /mnt/disks/ssd1
-  nodeAffinity:
+  nodeAffinity:  # 这里就设置了节点亲和
     required:
       nodeSelectorTerms:
       - matchExpressions:
         - key: kubernetes.io/hostname
           operator: In
           values:
-          - example-node
+          - node01
 ```
+
+如果你在node02上也有/data/vol1这个目录，上面这个PV也一定不会在node02上，因为下面的nodeAffinity设置了主机名就等于node01。
 
 **注意：**
 
@@ -173,7 +174,7 @@ spec:
 3. 数据能够持久化；
 4. host path和local volume还有一个共同的缺点：都需要在对应节点上创建映射的目录或文件，否则pod无法启动，报目录找不到错误。
 
-## 持久化存储
+## 持久化(动态)存储
 
 所谓容器挂载卷就是将宿主机的目录挂载到容器中的某个目录。而持久化则意味着这个目录里面的内容不会因为容器被删除而清除，也不会和当前宿主机有什么直接关系，而是一个外部的。这样当POD重建以后或者在其他主机节点上启动后依然可以访问这些内容。
 
@@ -244,15 +245,3 @@ Volume 提供了非常好的数据持久化方案，不过在可管理性上还�
 4. 启动容器挂载宿主机上的目录到容器中
 
 相对于文件设备存储来说块设备要稍微复杂一点，不过上面这些过程都是自动的有kubelet来完成。
-
-## 总结
-
-负责把PVC绑定到PV的是一个持久化存储卷控制循环，这个控制器也是kube-manager-controller的一部分运行在master上。而真正把目录挂载到容器上的操作是在POD所在主机上发生的，所以通过kubelet来完成。而且创建PV以及PVC的绑定是在POD被调度到某一节点之后进行的，完成这些操作，POD就可以运行了。下面梳理一下挂载一个PV的过程：
-
-1. 用户提交一个包含PVC的POD
-2. 调度器把根据各种调度算法把该POD分配到某个节点，比如Node01
-3. Node01上的kubelet等待Volume Manager准备存储设备
-4. PV控制器调用存储插件创建PV并与PVC进行绑定
-5. Attach/Detach Controller或Volume Manager通过存储插件实现设备的attach。（这一步是针对块设备存储）
-6. Volume Manager等待存储设备变为可用后，挂载该设备到`/var/lib/kubelet/pods/<Pod 的 ID>/volumes/kubernetes.io~<Volume 类型 >/<Volume 名字 >`目录上
-7. Kubelet被告知卷已经准备好，开始启动POD，通过映射方式挂载到容器中

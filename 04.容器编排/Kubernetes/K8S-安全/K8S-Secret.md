@@ -16,11 +16,11 @@ Secret有三种类型：
 
 ![secret-type](images/secret-type.png)
 
-## 创建 Secret (Opaque类型)
+### 创建 Secret (Opaque类型)
 
 Opaque类型的Secret，其value为base64编码后的值
 
-### 1. 从文件中创建Secret
+#### 1. 从文件中创建Secret
 
 分别创建两个名为username.txt和password.txt的文件：
 
@@ -35,7 +35,7 @@ echo -n "123456" > ./password.txt
 
 ![secret-1](images/secret-1.png)
 
-### 2. 使用 yaml描述文件创建Secret
+#### 2. 使用 yaml描述文件创建Secret
 
 首先使用base64对数据进行编码：
 
@@ -62,14 +62,14 @@ data:
 
 `kubectl create -f ./secret.yaml`
 
-## 使用 Secret
+### 使用 Secret
 
 创建好Secret之后，可以通过两种方式使用：
 
 - 以Volume方式
 - 以环境变量方式
 
-### 1. 将Secret挂载到Volume中
+#### 1. 将Secret挂载到Volume中
 
 ``` yaml
 apiVersion: v1
@@ -129,10 +129,14 @@ spec:
 
 在这种情况下：
 
-- username 存储在/etc/foo/my-group/my-username中
+- username 存储在`/etc/foo/my-group/my-username`中
 - password未被挂载
 
-### 2. 将Secret设置为环境变量
+被挂载的secret内容自动更新
+
+- 也就是如果修改一个Secret的内容，那么挂载了该Secret的容器中也将会取到更新后的值，但是这个时间间隔是由kubelet的同步时间决定的。最长的时间将是一个同步周期加上缓存生命周期(period+ttl)
+
+#### 2. 将Secret设置为环境变量
 
 ``` yaml
 apiVersion: v1
@@ -157,7 +161,7 @@ spec:
   restartPolicy: Never
 ```
 
-## kubernetes.io/dockerconfigjson
+### kubernetes.io/dockerconfigjson
 
 kubernetes.io/dockerconfigjson用于存储docker registry的认证信息，可以直接使用kubectl create secret命令创建：
 
@@ -186,7 +190,7 @@ kubectl create secret docker-registry myregistrykey \
   --from-file="~/.dockercfg"
 ```
 
-### 使用 imagePullSecrets
+#### 使用 imagePullSecrets
 
 ``` shell
 kubectl create secret docker-registry myregistrykey \
@@ -237,7 +241,7 @@ spec:
       nodePort: 30081
 ```
 
-## kubernetes.io/service-account-token
+### kubernetes.io/service-account-token
 
 用于被 serviceaccount 引用
 
@@ -246,3 +250,140 @@ serviceaccout 创建时 Kubernetes 会默认创建对应的 secret。Pod 如果�
 ![images/secret-pod-token-1](images/secret-pod-token-1.png)
 
 ![images/secret-pod-token-2](images/secret-pod-token-2.png)
+
+## secret 使用注意事项
+
+- 需要被挂载到Pod中的secret需要提前创建，否则会导致Pod创建失败
+
+- secret是有命名空间属性的，只有在相同namespace的Pod才能引用它
+
+- 单个Secret容量限制的1Mb，这么做是为了防止创建超大的Secret导致apiserver或kubelet的内存耗尽。但是创建过多的小容量secret同样也会耗尽内存，这个问题在将来可能会有方案解决
+
+- kubelet只支持由API server创建出来的Pod中引用secret，使用特殊方式创建出来的Pod是不支持引用secret的，比如通过kubelet的--manifest-url参数创建的pod，或者--config参数创建的，或者REST API创建的。
+
+- 通过secretKeyRef引用一个不存在你secret key会导致pod创建失败
+
+## secret 示例
+
+### Pod中的ssh keys
+
+- 创建一个包含ssh keys的secret
+
+    `kubectl create secret generic ssh-key-secret --from-file=ssh-privatekey=/path/to/.ssh/id_rsa --from-file=ssh-publickey=/path/to/.ssh/id_rsa.pub`
+
+创建一个Pod，其中的容器可以用volume的形式使用ssh keys
+
+``` yaml
+kind: Pod
+apiVersion: v1
+metadata:
+  name: secret-test-pod
+  labels:
+    name: secret-test
+spec:
+  volumes:
+  - name: secret-volume
+    secret:
+      secretName: ssh-key-secret
+  containers:
+  - name: ssh-test-container
+    image: mySshImage
+    volumeMounts:
+    - name: secret-volume
+      readOnly: true
+      mountPath: "/etc/secret-volume"
+```
+
+### Pod中区分生产和测试证书
+
+创建2种不同的证书，分别用在生产和测试环境
+
+``` shell
+$ kubectl create secret generic prod-db-secret --from-literal=username=produser --from-literal=password=Y4nys7f11
+secret "prod-db-secret" created
+$ kubectl create secret generic test-db-secret --from-literal=username=testuser --from-literal=password=iluvtests
+secret "test-db-secret" created
+```
+
+再创建2个不同的Pod
+
+``` yaml
+apiVersion: v1
+kind: List
+items:
+- kind: Pod
+  apiVersion: v1
+  metadata:
+    name: prod-db-client-pod
+    labels:
+      name: prod-db-client
+  spec:
+    volumes:
+    - name: secret-volume
+      secret:
+        secretName: prod-db-secret
+    containers:
+    - name: db-client-container
+      image: myClientImage
+      volumeMounts:
+      - name: secret-volume
+        readOnly: true
+        mountPath: "/etc/secret-volume"
+- kind: Pod
+  apiVersion: v1
+  metadata:
+    name: test-db-client-pod
+    labels:
+      name: test-db-client
+  spec:
+    volumes:
+    - name: secret-volume
+      secret:
+        secretName: test-db-secret
+    containers:
+    - name: db-client-container
+      image: myClientImage
+      volumeMounts:
+      - name: secret-volume
+        readOnly: true
+        mountPath: "/etc/secret-volume"
+```
+
+两个容器中都会有下列的文件
+
+- /etc/secret-volume/username
+- /etc/secret-volume/password
+
+### 以“.”开头的key可以产生隐藏文件
+
+``` yaml
+kind: Secret
+apiVersion: v1
+metadata:
+  name: dotfile-secret
+data:
+  .secret-file: dmFsdWUtMg0KDQo=
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: secret-dotfiles-pod
+spec:
+  volumes:
+  - name: secret-volume
+    secret:
+      secretName: dotfile-secret
+  containers:
+  - name: dotfile-test-container
+    image: k8s.gcr.io/busybox
+    command:
+    - ls
+    - "-l"
+    - "/etc/secret-volume"
+    volumeMounts:
+    - name: secret-volume
+      readOnly: true
+      mountPath: "/etc/secret-volume"
+```
+
+会在挂载目录下产生一个隐藏文件，/etc/secret-volume/.secret-file

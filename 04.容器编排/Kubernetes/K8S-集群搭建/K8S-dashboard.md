@@ -107,14 +107,20 @@ ca.crt:     1025 bytes
 如果觉得每次粘贴token很麻烦，可以按照下面的步骤，生成 conf文件
 
 ``` shell
+## 使用token进行认证
 kubectl get secret -n kube-system|grep admin-user
 
 DASH_TOCKEN=$(kubectl get secret -n kubernetes-dashboard admin-user-token-89rlc -o jsonpath={.data.token}|base64 -d)
 
 #配置集群信息
 kubectl config set-cluster kubernetes --server=172.20.249.16:6443 --kubeconfig=./dashbord-admin.conf
+# 设置客户端认证
 kubectl config set-credentials admin-user --token=$DASH_TOCKEN --kubeconfig=./dashbord-admin.conf
+
+# 设置默认上下文
 kubectl config set-context admin-user@kubernetes --cluster=kubernetes --user=admin-user --kubeconfig=./dashbord-admin.conf
+
+#设置当前使用配置
 kubectl config use-context admin-user@kubernetes --kubeconfig=./dashbord-admin.conf
 
 ```

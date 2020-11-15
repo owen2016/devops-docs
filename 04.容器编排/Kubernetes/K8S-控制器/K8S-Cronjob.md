@@ -6,7 +6,16 @@
 
 - **应用场景：** 如通知，备份等
 
-## 示例
+## 创建 Cronjob
+
+**Cronjob Spec格式：**
+
+- .spec.schedule指定任务运行周期，格式同Cron
+- .spec.jobTemplate指定需要运行的任务，格式同Job
+- .spec.startingDeadlineSeconds指定任务开始的截止期限
+- .spec.concurrencyPolicy指定任务的并发策略，支持Allow、Forbid和Replace三个选项
+
+**示例：**
 
 每隔一分钟输出一条信息，打印hello
 

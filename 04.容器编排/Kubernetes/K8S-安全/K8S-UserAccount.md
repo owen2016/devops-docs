@@ -1,0 +1,5 @@
+# UserAccount
+
+User Account是在集群外部访问apiserver时使用的用户，比如kubectl命令就是作为kubernetes-admin用户来执行的，其中~/.kube/config指定了用户的证书，以便和apiserver互相认证。当然对于user account来说，是有多种认证方式的，参考官网，但是默认使能是x509客户端证书方式。
+
+因为x509客户端证书认证采用双向认证，所以开始之前先简单了解下https双向认证的原理和流程

@@ -1,10 +1,6 @@
 # Annotation
 
-Annotation 与 Label类似，也使用key/value键值对的形式进行定义。
-
-Label具有严格的命名规则，它定义的是Kubernetes对象的元数据（Metadata），并且用于Label Selector。
-
-Annotation则是用户任意定义的“附加”信息，以便于外部工具进行查找。
+Label可用于选择对象并查找满足某些条件的对象集合。相比之下，Annotations不用于标识和选择对象，虽然它也是键值形式。Annotations不会被Kubernetes直接使用，其主要目的是方便用户阅读查找。
 
 用Annotation来记录的信息包括：
 
