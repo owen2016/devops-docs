@@ -253,7 +253,7 @@ test:
     - branches # this job will affect every branch except 'master'
   except:
     - master
-    
+
 # the 'pages' job will deploy and build your site to the 'public' path
 pages:
   stage: deploy

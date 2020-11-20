@@ -6,11 +6,11 @@
 
 1.打开setting,在搜索框中输入`renderControlCharacters`,选中勾选框,即可显示tab
 
-![](http://cdn.devopsing.site/renderControlCharacters.JPG)
+![picgo](https://gitee.com/owen2016/pic-hub/raw/master/pics/renderControlCharacters.JPG)
 
 2.在搜索框中输入`renderWhitespace`,选择all,即可显示空格.
 
-![](http://cdn.devopsing.site/renderWhitespace.JPG)
+![](https://gitee.com/owen2016/pic-hub/raw/master/pics/renderWhitespace.JPG)
 
 ## 插件扩展
 

@@ -26,7 +26,7 @@ docsify 是一个动态生成文档网站的工具, 与GitBook，Hexo不同，�
 
 ### 本地预览网站
 
-运行一个本地服务器通过 docsify serve 可以方便的预览效果，而且提供 LiveReload 功能，可以让实时的预览。默认访问http://localhost:3000/#/。
+运行一个本地服务器通过 docsify serve 可以方便的预览效果，而且提供 LiveReload 功能，可以让实时的预览。默认访问<http://localhost:3000/#/>。
 
 `docsify serve docs`
 

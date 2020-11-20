@@ -37,7 +37,7 @@ sudo apt-get install openssh-client
 
 `systemctl status ssh`
 
-![Linux-ssh-keygen(免密登录)-7.png](./images/Linux-ssh-keygen(免密登录)-7.png)
+![Linux-ssh-keygen(免密登录)-7.png](./_images/Linux-ssh-keygen(免密登录)-7.png)
 
 如果不是active(running)的状态，可以通过此命令去启：
 `sudo /etc/init.d/ssh start`
@@ -46,7 +46,7 @@ sudo apt-get install openssh-client
 
 `/etc/init.d/ssh status or ps -e | grep ssh`
 
-![Linux-ssh-keygen(免密登录)-8.png](./images/Linux-ssh-keygen(免密登录)-8.png)
+![Linux-ssh-keygen(免密登录)-8.png](./_images/Linux-ssh-keygen(免密登录)-8.png)
 
 #### 修改sshd_config 配置
 
@@ -54,7 +54,7 @@ sudo apt-get install openssh-client
 
 修改为如下配置：
 
-![Linux-ssh-keygen(免密登录)-10.png](./images/Linux-ssh-keygen(免密登录)-10.png)
+![Linux-ssh-keygen(免密登录)-10.png](./_images/Linux-ssh-keygen(免密登录)-10.png)
 
 重启ssh服务
 
@@ -77,7 +77,7 @@ ssh-keygen -t rsa
 
 一直回车即可
 
-![Linux-ssh-keygen(免密登录)-11.png](./images/Linux-ssh-keygen(免密登录)-11.png)
+![Linux-ssh-keygen(免密登录)-11.png](./_images/Linux-ssh-keygen(免密登录)-11.png)
 
 #### 复制控制主机SSH密钥到目标主机，开启无密码SSH登录
 
@@ -85,8 +85,8 @@ ssh-copy-id 将本机的公钥复制到远程机器的authorized_keys文件中
 
 `ssh-copy-id  -i ~/.ssh/id_rsa.pub  root@IP`
 
-![Linux-ssh-keygen(免密登录)-1.png](./images/Linux-ssh-keygen(免密登录)-2.png)  
+![Linux-ssh-keygen(免密登录)-1.png](./_images/Linux-ssh-keygen(免密登录)-2.png)  
 
 此时，ssh remote登录到远程机器不用再输入密码
 
-![Linux-ssh-keygen(免密登录)-1.png](./images/Linux-ssh-keygen(免密登录)-3.png)
+![Linux-ssh-keygen(免密登录)-1.png](./_images/Linux-ssh-keygen(免密登录)-3.png)

@@ -1,9 +1,0 @@
-# Helm
-
-Helm是用于管理Kubernetes图表的理想工具。Kubernetes图表是预配置的Kubernetes资源包。这些图表包含两大部分：软件包的描述，以及一个或多个Kubernetes清单文件的模板。从本质上讲，Helm简化了Kubernetes应用程序的安装和管理。
-
-Helm拥有大量有价值的功能，可帮助DevOps团队顺利运行Kubernetes应用程序。你可以找到并使用打包为官方Kubernetes图表的流行软件。一些图表可以在Kubeapps上找到。你甚至可以创建构建并共享你自己的应用程序作为Kubernetes图表供其他人使用
-
-Helm是由helm CLI和Tiller组成，是典型的C/S应用。helm运行与客户端，提供命令行界面，而Tiller应用运行在Kubernetes内部。Helm管理的kubernetes资源包称之为Chart
-
-- <https://github.com/helm/helm>

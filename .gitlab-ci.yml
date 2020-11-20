@@ -1,0 +1,32 @@
+variables:
+  Mode: ""
+
+stages:
+  - deploy
+
+deploy_without_docker:
+  stage: deploy
+  script:
+   - ./deploy.sh
+  only:
+    - master
+
+.deploy_template: &deploy_template
+  stage: deploy
+  script:
+    - p=`pwd`
+    - echo "WorkDir:$p" 
+    - docker-compose build
+    - docker-compose up -d
+  after_script:
+    - docker images | grep none | awk '{print $3}' | xargs docker rmi -f
+  only:
+    - master
+
+deploy_with_docker:
+  <<: *deploy_template
+  tags:
+    - docsify
+  only:
+   variables:
+    - $Mode == 'docker'

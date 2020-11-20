@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  devops-docsify:
+    image: docsify
+    build:
+      context: .
+    container_name: devops-docsify
+    restart: always
+    ports:
+      - 3000:3000
