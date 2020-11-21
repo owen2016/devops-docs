@@ -1,5 +1,7 @@
 # Kubernetes 基础
 
+[TOC]
+
 Kubernetes 是容器编排管理系统，是一个开源的平台，可以实现容器集群的自动化部署、自动扩缩容、维护等功能。Kubernetes 是Google 2014年创建管理的，是Google 10多年大规模容器管理技术Borg的开源版本。Kubernetes 基本上已经是私有云部署的一个标准。
 
 Kubernets有以下几个特点
@@ -17,6 +19,49 @@ K8s 是将8个字母 “ubernete” 替换为 “8” 的缩写，后续我们�
 ## 架构
 
 ![](https://gitee.com/owen2016/pic-hub/raw/master/1603723019_20201023084340816_1313476094.png)
+
+Kubernetes集群由很多节点组成，分为两大类：
+
+- 主节点(master) 承载Kubernetes控制和管理整个集群系统的控制面板
+- 工作节点(node) 运行实际部署的应用
+
+其中，Master节点上运行着集群管理相关的一组进程 etcd、API Server、Controller Manager、Scheduler，后三个组件构成了Kubernetes的总控中心，这些进程实现了整个集群的资源管理、Pod调度、弹性伸缩、安全控制、系统监控和纠错等管理功能，并且全都是自动完成。
+
+在每个Node上运行Kubelet、Proxy、Docker daemon三个组件，负责对本节点上的Pod的生命周期进行管理，以及实现服务代理的功能。
+
+![k8s-2](./_images/k8s-基础-2.jpg)
+
+## 执行过程
+
+![k8s-3](./_images/k8s-基础-3.png)
+
+通过Kubectl提交一个创建RC的请求，该请求通过API Server被写入etcd中，此时 Controller Manager通过 API Server的监听资源变化的接口监听到这个RC事件，分析之后，发现当前集群中还没有它所对应的Pod实例，于是根据RC里的Pod模板定义生成一个Pod对象，通过API Server写入etcd，接下来，此事件被Scheduler发现，它立即执行一个复杂的调度流程，为这个新Pod选定一个落户的Node，然后通过API Server 将这一结果写入到etcd中，随后，目标Node上运行的Kubelet进程通过API Server监测到这个“新生的”Pod，并按照它的定义，启动该Pod并任劳任怨地负责它的下半生，直到Pod的生命结束。
+
+随后，我们通过Kubectl提交一个新的映射到该Pod的Service的创建请求，Controller Manager会通过Label标签查询到相关联的Pod实例，然后生成Service的Endpoints信息，并通过API Server写入到etcd中，接下来，所有Node上运行的Proxy进程通过 API Server 查询并监听Service对象与其对应的Endpoints信息，建立一个软件方式的负载均衡器来实现Service 访问到 后端Pod的流量转发功能。
+
+- etcd
+用于持久化存储集群中所有的资源对象，如Node、Service、Pod、RC、Namespace等；API Server提供了操作etcd的封装接口API，这些API基本上都是集群中资源对象的增删改查及监听资源变化的接口。
+
+- Controller Manager
+集群内部的管理控制中心，其主要目的是实现Kubernetes集群的故障检测和恢复的自动化工作，比如根据RC的定义完成Pod的复制或移除，以确保Pod实例数符合RC副本的定义；根据Service与Pod的管理关系，完成服务的Endpoints对象的创建和更新；其他诸如Node的发现、管理和状态监控、死亡容器所占磁盘空间及本地缓存的镜像文件的清理等工作也是由Controller Manager完成的。
+
+- 客户端通过Kubectl命令行工具 或 Kubectl Proxy来访问Kubernetes系统，在Kubernetes集群内部的客户端可以直接使用Kuberctl命令管理集群。
+
+- Kubectl Proxy是API Server的一个反向代理，在Kubernetes集群外部的客户端可以通过Kubernetes Proxy来访问API Server
+
+## 架构2
+
+- 核心层：Kubernetes 最核心的功能，对外提供 API 构建高层的应用，对内提供插件式应用执行环境
+- 应用层：部署（无状态应用、有状态应用、批处理任务、集群应用等）和路由（服务发现、DNS 解析等）
+- 管理层：系统度量（如基础设施、容器和网络的度量），自动化（如自动扩展、动态 Provision 等）以及策略管理（RBAC、Quota、PSP、NetworkPolicy 等）
+- 接口层：kubectl 命令行工具、客户端 SDK 以及集群联邦
+- 生态系统：在接口层之上的庞大容器集群管理调度的生态系统，可以划分为两个范畴
+  - Kubernetes 外部：日志、监控、配置管理、CI、CD、Workflow等
+  - Kubernetes 内部：CRI、CNI、CVI、镜像仓库、Cloud Provider、集群自身的配置和管理等
+
+![](https://gitee.com/owen2016/pic-hub/raw/master/1603413782_20201013150758430_259500681.png)
+
+![](https://gitee.com/owen2016/pic-hub/raw/master/1603413781_20200925155556216_1498366808.png)
 
 ### 1. master
 
@@ -85,9 +130,6 @@ worker节点组件运行在每个k8s Node上，提供K8s运行时环境，以及
 12. Namespace: namespace好比一个资源名字的前缀，帮助不同的项目可以共享cluster，防止出现命名冲突。
 
 13. Annotation: 相对于label来说可以容纳更大的键值对，它对我们来说是不可读的数据，只是为了存储不可识别的辅助数据，尤其是一些被工具或系统扩展用来操作的数据。
-
-
-## 核心概念
 
 ### 1.Master
 
@@ -250,3 +292,9 @@ Label相当于我们熟悉的标签，给某个资源对象定义一个Label就�
 ### 8、Replica Set
 
 下一代的Replication Controlle，Replication Controlle 只支持基于等式的selector（env=dev或environment!=qa）但Replica Set还支持新的、基于集合的selector（version in (v1.0, v2.0)或env notin (dev, qa)），这对复杂的运维管理带来很大方便。
+
+## Kubernetes 示例
+
+搭建完k8s集群后，可以使用该示例体会 Kubernetes 的使用
+
+- <k8s-demo>
