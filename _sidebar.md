@@ -1,5 +1,7 @@
 - 理论基础
   - [DevOps工程师的成长](README.md)
+  - [Waht is DevOps](02-CICD/020-理论基础/what-is-devops.md)
+  - [Agile, CI/CD, DevOps](02-CICD/020-理论基础/Agile-CI&CD-DevOps.md)
 
 - 持续交付
   - **GitLab**

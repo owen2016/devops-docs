@@ -83,7 +83,7 @@ CI/CD 都体现了如今快节奏市场中的文化和发展原则，旨在缩�
 
 所以我不觉得两者有谁包含谁，两者在这个层面讲，一个是技术领域，一个是业务领域。
 
-### 参考
+## 参考
 
 - [Continuous integration vs. continuous delivery vs. continuous deployment](https://www.atlassian.com/continuous-delivery/principles/continuous-integration-vs-delivery-vs-deployment)
 

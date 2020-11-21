@@ -25,27 +25,34 @@ StatefulSet是Kubernetes提供的管理有状态应用的负载管理控制器AP
 
 - StatefulSet 里的 Pod 采用稳定的持久化存储卷，通过 PV/PVC 来实现，删除 Pod 时默认不会删除与StatefulSet 相关的存储卷（为了保证数据的安全）
 
-## 相关知识概念
+## 相关知识
 
-SatefulSet 涉及到一些其他概念和知识（特别是k8s存储），这里先提前介绍下有个认知，随后会在其他章节详细介绍。
+StatefulSet 除了要与PV卷捆绑使用以存储 Pod 的状态数据，还要与 Headless Service(无头服务) 配合使用，所以有必要先了解它们。
 
-### Headless Service
+### 1. Headless Service
 
-StatefulSet 除了要与PV卷捆绑使用以存储 Pod 的状态数据，还要与 Headless Service(无头服务) 配合使用。
+Service是Kubernetes项目用来将一组Pod暴露给外界访问的一种机制。
 
-**普通Service：** 一组Pod访问策略，提供cluster-IP群集之间通讯，还提供负载均衡和服务发现。
+Service被访问的方式：
 
-**Headless Service：**  不需要cluster-IP (值为None)，直接绑定具体的Pod的IP, 这个Service被创建后并不会分配一个VIP，而是以DNS记录的方式暴露它所代理的Pod。无头服务经常用于statefulset的有状态部署
+- Service的VIP（Virtual IP）
+- Service的DNS方式，只要访问“my-svc.my-namespace.svc.cluster.local”这条DNS记录，就可以访问到名为my-svc的Service所代理的某一个Pod
+
+在第二种Service DNS的方式下，具体还可以分为两种处理方法：
+
+- 第一种是Normal Service。这种情况下，访问“my-svc.my-namespace.svc.cluster.local”解析到的，正是my-svc这个Service 的VIP，后面的流程和VIP一致
+
+- 第二种是`Headless Service`。这种情况下，访问“my-svc.my-namespace.svc.cluster.local”解析到的，直接就是my-svc代理的某一个Pod的IP地址。
   
-  当按照这样的方式创建了一个Headless Service后，它所代理的所有Pod的IP地址，都会被绑定一个如下格式的DNS记录，如下：
+  **这里的区别在于，Headless Service被创建后并不会分配一个VIP（即cluster-IP为None），而是直接以DNS记录的方式解析出被代理Pod的IP地址。**
+  
+所谓的Headless Service仍是一个标准的Service的YAML文件，只不过spec.clusterIP的值为None。当按照这样的方式创建了一个Headless Service后，它所代理的所有Pod的IP地址，都会被绑定一个如下格式的DNS记录，如下：
 
-   `<pod-name>.<svc-name>.<namespace>.svc.cluster.local`
+   `<pod-name>.<svc-name>.<namespace>.svc.cluster.local //该DNS记录是Kubernetes为Pod分配的唯一“可解析身份”`
 
-   这条DNS记录，是Kubernetes为Pod分配的唯一“可解析身份”
+**比如:**  一个 3 节点的 kafka 的 StatefulSet 集群，对应的 Headless Service 的名字为 kafkasvc，StatefulSet 的名字为kafka，则 StatefulSet 里面的 3 个 Pod 的 DNS 名称分别为kafka-0.kafkasvc、kafka-1.kafkasvc、kafka-2.kafkasvc，这些DNS 名称可以直接在集群的配置文件中固定下来
 
-   比如一个 3 节点的 kafka 的 StatefulSet 集群，对应的 Headless Service 的名字为 kafkasvc，StatefulSet 的名字为kafka，则 StatefulSet 里面的 3 个 Pod 的 DNS 名称分别为kafka-0.kafkasvc、kafka-1.kafkasvc、kafka-2.kafkasvc，这些DNS 名称可以直接在集群的配置文件中固定下来
-
-### SatefulSet、Volume、PVC、PV之间的关系
+### 2. SatefulSet、Volume、PVC、PV之间的关系
 
 - volume是pod中用来挂在文件到容器中用的，支持多种的volume类型挂在，其中包括hostpath,emptydir,ceph-rbd等，，volume可以说是一个存储挂载的桥梁啦，可以通过volume关联中的persistentVolumeClaim关联pvc，然后用pvc关联的pv的存储。
 
@@ -71,7 +78,7 @@ StatefulSet 将应用状态抽象成了两种情况：
 
 StatefulSet 的核心功能就是通过某种方式记录这些状态，在 Pod 被重建时，能够为新 Pod 恢复这些状态。
 
-### 拓扑状态
+### 1. 拓扑状态
 
 **StatefulSet示例如下:**
 
@@ -126,7 +133,7 @@ spec:
 
 - StatefulSet 使用 Headless 服务来控制 Pod 的域名，这个域名的 FQDN 为：`$(servicename).$(namespace).svc.cluster.local`，其中，“cluster.local” 指的是集群的域名。 根据 volumeClaimTemplates，为每个 Pod 创建一个 pvc，pvc 的命名则匹配模式：`(volumeClaimTemplates.name)-(pod_name)`，比如上面的volumeMounts.name=www， Podname=web-[0-2]，因此创建出来的 PVC 是 www-web-0、www-web-1、www-web-2
 
-### 存储状态
+### 2. 存储状态
 
 StatefulSet 对存储状态的管理，主要使用的是 PersistentVolume 的功能
 
@@ -180,7 +187,7 @@ spec:
 
 在这两个Pod绑定的volume里写入不同的内容, 再手动delete掉这两个Pod, 待Pod被重建后, 再次查看它们所绑定的volume中的内容, 会发现依然没有任何变化
 
-### StatefulSet控制器恢复Pod的过程
+#### StatefulSet控制器恢复Pod的过程
 
 1. 当Pod被删除之后，这个Pod对应的PVC和PV及它们的绑定关系并不会被删除(这点通过PV/PVC的"AGE"字段可以看出)，因此PV所对应的存储资源中所存储的内容当然也不会有任何改变；
 
