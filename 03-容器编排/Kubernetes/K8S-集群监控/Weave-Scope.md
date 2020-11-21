@@ -56,6 +56,7 @@ Weave Scope 会自动生成容器之间的关系图，方便理解容器之间�
   ![weave-scope-1](./_images/weave-scope-1.png)
 
 - 查看  `kubectl get pod -n weave`
+
   ![weave-scope-2](./_images/weave-scope-2.png)
 
 - 效果

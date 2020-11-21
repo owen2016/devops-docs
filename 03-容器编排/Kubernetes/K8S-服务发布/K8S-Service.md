@@ -16,7 +16,6 @@ Service定义了一个Pod的逻辑集合和访问这个集合的策略。集合�
 
 ## 定义一个Service
 
-
 1.创建Services的方法：
 
 1).kubectl expoese命令，会给我们的pod创建一个service，供外部访问
