@@ -194,9 +194,9 @@ kubectl create secret docker-registry myregistrykey \
 
 ``` shell
 kubectl create secret docker-registry myregistrykey \
-   --docker-server=harbor.augmentum.com.cn \
+   --docker-server=harbor.xxxx.com.cn \
    --docker-username=owen.li --docker-password=********** \
-   --docker-email=owenli@augmentum.com.cn
+   --docker-email=owenli@xxxx.com.cn
 ```
 
 在创建 Pod 的时候，通过 imagePullSecrets 来引用刚创建的 myregistrykey:
@@ -219,7 +219,7 @@ spec:
     spec:
       containers:
       - name: vuejs
-        image: harbor.augmentum.com.cn/augops/vuejs-docker:1.0.61_master_9438c18
+        image: harbor.xxxx.com.cn/vuejs-docker:1.0.61_master_9438c18
         ports:
         - containerPort: 80
       imagePullSecrets:

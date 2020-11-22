@@ -12,6 +12,18 @@ Kubernets有以下几个特点
 
 K8s 是将8个字母 “ubernete” 替换为 “8” 的缩写，后续我们将使用 K8s 代替 Kubernetes
 
+## 优势
+
+1. 故障迁移：当某一个 node 节点关机或挂掉后，node 节点上的服务会自动转移到另一个 node 节点上，这个过程所有服务不中断。这是 docker 或普通云主机是不能做到的。
+
+2. 资源调度：当 node 节点上的 cpu、内存不够用的时候，可以扩充 node 节点，新建的 pod 就会被 kube-schedule 调度到新扩充的 node 节点上。
+
+3. 资源隔离：创建开发、运维、测试三个命名空间，切换上下文后，开发人员就只能看到开发命名空间的所有 pod，看不到运维命名空间的 pod，这样就不会造成影响，互不干扰。传统的主机或只有 docker 环境中，登录进去就会看到所有的服务或者容器。
+
+4. 因为采用 docker 容器，进程之间互不影响，
+
+5. 安全：不同角色有不同的权限，查看 pod、删除 pod 等操作；RBAC 认证增加了 k8s 的安全
+
 ## 参考
 
 - [A Beginner’s Guide to Kubernetes](https://dzone.com/articles/a-beginners-guide-to-kubernetes)
