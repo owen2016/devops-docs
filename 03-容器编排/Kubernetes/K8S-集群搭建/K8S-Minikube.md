@@ -87,7 +87,7 @@ Minikube 用于快速在本地搭建 Kubernetes 单节点集群环境，它对�
 
 参考: <https://minikube.sigs.k8s.io/docs/drivers/kvm2/>
 
-`minikube start --image-mirror-country cn  --image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers --registry-mirror=https://ovfftd6p.mirror.aliyuncs.com --driver=kvm2`
+`minikube start --image-mirror-country cn  --image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers --registry-mirror=https://ovfftd6p.mirror.aliyuncs.com --vm-driver=kvm2`
 
 ##### --vm-driver=hyperv
 
