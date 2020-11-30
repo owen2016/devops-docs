@@ -129,6 +129,8 @@ kubernetes本身支持的动态PV创建不包括nfs，所以需要使用额外�
 
     nfs-client is an automatic provisioner that use your existing and already configured NFS server to support dynamic provisioning of Kubernetes Persistent Volumes via Persistent Volume Claims. Persistent volumes are provisioned as ${namespace}-${pvcName}-${pvName}.
 
+    nfs-client-provisioner 是一个Kubernetes的简易NFS的外部provisioner，本身不提供NFS，需要现有的NFS服务器提供存储 -https://www.cnblogs.com/klvchen/p/13234779.html
+
 - <https://github.com/kubernetes-sigs/nfs-ganesha-server-and-external-provisioner>
 
 下面我们以[nfs-provisioner](<https://github.com/kubernetes-sigs/nfs-ganesha-server-and-external-provisioner/tree/master/deploy/kubernetes>)为例
