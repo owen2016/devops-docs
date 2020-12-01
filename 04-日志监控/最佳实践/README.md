@@ -12,7 +12,7 @@
 - 分析－可以支持 UI 分析
 - 警告－能够提供错误报告，监控机制
 
-![log-collect-1](./_images/log-collect-1.png)
+![log-collect-1](./images/log-collect-1.png)
 
 ## ELK/EFK日志分析平台
 
@@ -27,3 +27,17 @@ Filebeat是一个日志文件托运工具，在你的服务器上安装客户端
 
 4. Kibana
 开源日志报表系统，对elasticsearch以及logstash有良好的web页面支持。对elasticsearch提供的数据进行分析展示
+
+## 日志框架
+
+为了更好地进行日志配置，可能有必要了解下常用的日志框架，特别是日志的配置
+
+- 日志门面 : JCL 、 slf4j
+
+- 日志实现 : JUL 、 logback 、 log4j 、 log4j2
+
+    ![](./images/log-framework.png)
+
+- Logback
+  - http://logback.qos.ch/
+  - http://www.logback.cn/
