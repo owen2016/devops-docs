@@ -4,10 +4,10 @@
 
 ![](https://gitee.com/owen2016/pic-hub/raw/master/202011/1606058777_20201113144038266_1786993979.png)
 
-
 ## 实践：基于客户端证书认证方式新建 Kubeconfig 访问集群
 
 ### Kubeconfig 文件详解
+
 在安装完 k8s 集群后会生成 $HOME/.kube/config 文件，这个文件就是 kubectl 命令行工具访问集群时使用的认证文件，也叫 Kubeconfig 文件。这个 Kubeconfig 文件中有很多重要的信息，文件大概结构是这样，这里说明下每个字段的含义
 
 ``` yaml
@@ -126,7 +126,6 @@ Error from server (Forbidden): pods “nginx-deployment-5754944d6c-dqsdj” is f
 
 可以看出新建的 Kubeconfig 文件可以使用，写权限是被 forbidden 的，说明前面配的 RBAC 权限机制是起作用的。
 
-
 ## 实践：Kubeconfig 或 token 方式登陆 Kubernetes dashboard
 
 我们打开 kubernetes dashboard 访问地址首先看到的是登陆认证页面，有两种登陆认证方式可供选择：Kubeconfig 和 Token 方式
@@ -144,7 +143,6 @@ Error from server (Forbidden): pods “nginx-deployment-5754944d6c-dqsdj” is f
 
 获取服务账号的 token；
 `kubectl get secret `kubectl get secret -n default | grep kube-dashboard-reader | awk '{print $1}'` -o jsonpath={.data.token} -n default | base64 -d `
-
 
 ### Kubeconfig 方式登陆 dashboard
 

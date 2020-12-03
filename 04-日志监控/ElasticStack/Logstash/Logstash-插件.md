@@ -1,5 +1,6 @@
 # 插件
 
+[TOC]
 ## Input：输入数据到logstash
 
 - file：从文件系统的文件中读取，类似于tail -f命令
@@ -28,6 +29,8 @@ grok在线调试：<https://grokdebug.herokuapp.com/>
 - geoip：添加地理信息(为前台kibana图形化展示使用)
 
 ## Outputs：outputs是logstash处理管道的最末端组件
+
+参考： <https://www.elastic.co/guide/en/logstash/current/output-plugins.html>
 
 一个event可以在处理过程中经过多重输出，但是一旦所有的outputs都执行结束，这个event也就完成生命周期
 
