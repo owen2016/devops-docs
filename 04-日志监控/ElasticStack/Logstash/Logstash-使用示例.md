@@ -63,6 +63,6 @@ Logstash会自动为数据添加@version, host, @timestamp等字段
     }
     ```
 
-    ![input](images/input.png)
+    ![input](_images/input.png)
 
-    ![output](images/output.png)
+    ![output](_images/output.png)
