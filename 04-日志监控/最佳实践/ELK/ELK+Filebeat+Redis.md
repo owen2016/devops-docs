@@ -10,7 +10,6 @@
 ``` yaml
 #写入源
 - input_type: log
-
   paths:
   - /var/www/html/*/storage/logs/laravel-2018-12-29.log
 

@@ -67,9 +67,26 @@ sudo apt-get update && sudo apt-get install logstash
 
 ## logstash 相关配置
 
+## jvm.options
+
+这个配置文件是有关jvm的配置，可以配置运行时内存的最大最小值，垃圾清理机制等
+
+`-Xms256m   #设置内存大小`
+
 ### pipeline配置文件
 
 定义数据处理流程的文件，一般是用户自定义，以.conf结尾。
+
+``` yaml
+user@owen-ubuntu:/etc/logstash$ cat pipelines.yml
+# This file is where you define your pipelines. You can define multiple.
+# For more information on multiple pipelines, see the documentation:
+#   https://www.elastic.co/guide/en/logstash/current/multiple-pipelines.html
+
+- pipeline.id: main
+  path.config: "/etc/logstash/conf.d/*.conf"
+
+```
 
 ### logstash.yml
 

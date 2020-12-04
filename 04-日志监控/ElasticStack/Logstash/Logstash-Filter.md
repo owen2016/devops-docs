@@ -66,7 +66,7 @@ ES Output插件主要的选项包括：
 
   `2017-03-15 18:34:14.535 - 112.65.171.98 INFO /root/ws/socketIo.js - xxxxxx与ws server断开连接`
 
-- ilebeat配置（建议filebeat使用rpm安装，以systemctl start filebeat方式启动）
+- Filebeat配置（建议filebeat使用rpm安装，以systemctl start filebeat方式启动）
 
   ``` yaml
   filebeat:
@@ -170,7 +170,7 @@ ES Output插件主要的选项包括：
      - match：数组中第一个值为要匹配的时间字段，后面的n个是匹配规则，它们的关系是or的关系，满足一个即可；
      - target：将match中匹配的时间替换该字段，默认替换@timestamp；
 
-目前为止我们解析的都是单行的日志，向JAVA这样的，若果是多行的日志我们又该怎么做呢？
+    目前为止我们解析的都是单行的日志，向JAVA这样的，若果是多行的日志我们又该怎么做呢？
 
 - 结果
 

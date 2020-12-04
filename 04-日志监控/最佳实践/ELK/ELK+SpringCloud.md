@@ -1,15 +1,13 @@
 # ELK + Spring cloud
 
+[TOC]
+
 logstash有许多种接受数据的方式，这里尝试两种
 
 1. 将springcloud微服务应用使用logstash-logback-encoder通过TCP方式传送到elk的logstash上
 2. 还有就是使用redis作为消息队列对日志数据做一个中转
 
-## ELK 部署
-
 ## 示例
-
-部署前，强烈建议先了解下[Logstash-目录结构](../../Log_Collectors/Logstash/Logstash-目录结构.md#Docker镜像的目录布局)
 
 ### TCP方式（logback）
 
@@ -21,36 +19,36 @@ logstash有许多种接受数据的方式，这里尝试两种
 
   - logstash.yml (内容可为空)
 
-        ```yml
-        config:
-        reload:
-            automatic: true
-            interval: 3s
-        xpack:
-        management.enabled: false
-        monitoring.enabled: false
-        ```
+    ```yml
+    config:
+    reload:
+        automatic: true
+        interval: 3s
+    xpack:
+    management.enabled: false
+    monitoring.enabled: false
+    ```
 
   - log4j2.properties
 
-        ```
-        logger.elasticsearchoutput.name = logstash.outputs.elasticsearch
-        logger.elasticsearchoutput.level = debug
-        ```
+    ``` text
+    logger.elasticsearchoutput.name = logstash.outputs.elasticsearch
+    logger.elasticsearchoutput.level = debug
+    ```
 
   - pipelines.yml
 
-        ``` yaml
-        - pipeline.id: logstash_tcp
-        path.config: "/usr/share/logstash/pipeline/logstash_tcp.conf"
-        ```
+    ``` yaml
+    - pipeline.id: logstash_tcp
+    path.config: "/usr/share/logstash/pipeline/logstash_tcp.conf"
+    ```
 
 - 在`/data/logstash/pipeline`下然后创建下列文件
 
   - logstash_tcp.conf
     表示开发环境的logs有多个环境可以创建多个文件进行指定配置同步到容器执行即可
 
-        ```json
+    ```json
         input {
         tcp {
             mode => "server"
@@ -68,13 +66,13 @@ logstash有许多种接受数据的方式，这里尝试两种
             }
             stdout { codec => rubydebug }
         }
-        ```
+    ```
 
 #### 2. SpringCloud代码配置
 
 - pom文件添加依赖
 
-    ```xml
+   ```xml
     <dependency>
         <groupId>net.logstash.logback</groupId>
         <artifactId>logstash-logback-encoder</artifactId>
@@ -173,13 +171,13 @@ Redis 服务器是 logstash 官方推荐的 broker 选择。
 
     ``` json
     input {
-    redis {
-    codec => json
-    host => "192.168.2.246"
-    port => 56379
-    key => "data-mgr"
-    data_type => "list"
-    }
+        redis {
+        codec => json
+        host => "192.168.2.246"
+        port => 56379
+        key => "data-mgr"
+        data_type => "list"
+     }
     }
     ```
 
