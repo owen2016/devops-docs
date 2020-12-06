@@ -97,8 +97,8 @@ NFS在文件传送或信息传送的过过程中，依赖于RPC协议。RPC，�
     - -e ：显示/etc/exports 所分享的目录数据。
 
     ``` shell
-    user@k8s-node-01:~$ showmount -e 172.20.249.5
-    Export list for 172.20.249.5:
+    user@k8s-node-01:~$ showmount -e 192.168.249.5
+    Export list for 192.168.249.5:
     /var/nfs/sharedir *
     ```
 
@@ -110,7 +110,7 @@ NFS在文件传送或信息传送的过过程中，依赖于RPC协议。RPC，�
 
     `$ sudo mount your_nfs_server_ip:/var/nfs/sharedir /mnt/nfs_sharedir`
 
-    e.g. `sudo mount 172.20.249.5:/var/nfs/sharedir /mnt/nfs_sharedir`
+    e.g. `sudo mount 192.168.249.5:/var/nfs/sharedir /mnt/nfs_sharedir`
 
    - 编辑fstab文件, 使系统每次启动时都能自动挂载
 

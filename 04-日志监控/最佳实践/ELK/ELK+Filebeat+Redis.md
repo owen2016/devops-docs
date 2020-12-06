@@ -5,6 +5,8 @@
 3. elasticsearch 接收logstash发送过来的数据，并提供了一个分布式多用户能力的全文搜索引擎
 4. Kibana可以非常详细的将日志转化为各种图表，为用户提供强大的数据可视化支持。
 
+![](https://gitee.com/owen2016/pic-hub/raw/master/pics/20201206233409.png)
+
 ## Filebeat 配置
 
 ``` yaml

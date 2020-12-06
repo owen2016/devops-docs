@@ -1,5 +1,7 @@
 # mysql命令行
 
+https://www.cnblogs.com/ellisonzhang/p/12175506.html
+
 <https://blog.csdn.net/embedded_sky/article/details/41966037>
 
 mysql命令行参数
