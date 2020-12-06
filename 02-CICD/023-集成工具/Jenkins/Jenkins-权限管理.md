@@ -66,7 +66,7 @@ jenkins 默认可以手动添加用户，由于简单不做解释；这里重点
 
 ![Jenkins-权限管理-8](./_images/Jenkins-权限管理-8.png)
 
-<font color='#ff0000'>注意</font>： 
+<font color='#ff0000'>注意</font>：
 
 1. jenkins 默认使用“Jenkins' own user database”,即自己本身的数据库，一旦切换，当前配置数据可能丢失，所以切忌随意修改该配置 ！
 
