@@ -1,0 +1,13 @@
+{
+    "line-length": false,
+    "ul-indent": { "indent": 4 },
+    "no-bare-urls": false,
+    "no-duplicate-header": false,
+    "no-emphasis-as-header": false,
+    "no-inline-html": false,
+    "no-hard-tabs": false,
+    "no-trailing-punctuation": false,
+    "MD045":false,
+    "MD029":false
+  }
+  
