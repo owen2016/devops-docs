@@ -2,7 +2,7 @@
 
 Service能将pod的变化屏蔽在集群内部，同时提供负载均衡的能力，自动将请求流量分布到后端的pod，这一功能的实现靠的就是`kube-proxy` 实现的。
 
-共有三种模式，userspace、iptables以及ipvs。
+共有三种模式，`userspace、iptables以及ipvs`
 
 ## UserSpace
 
@@ -18,18 +18,20 @@ Service能将pod的变化屏蔽在集群内部，同时提供负载均衡的能�
 
 该模式下，Kube-proxy充当了一个四层Load balancer的角色。由于kube-proxy运行在userspace中，在进行转发处理时会增加两次内核和用户空间之间的数据拷贝，`效率较另外两种模式低一些`；好处是当后端的Pod不可用时，kube-proxy可以重试其他Pod
 
-#### 示例-1
+### 示例-1
 
 以ssh-service1为例，kube为其分配了一个clusterIP。分配clusterIP的作用还是如上文所说，是方便pod到service的数据访问。
-```
+
+``` shell
 [minion@te-yuab6awchg-0-z5nlezoa435h-kube-master-udhqnaxpu5op ~]$ kubectl get service
 NAME             LABELS                                    SELECTOR              IP(S)            PORT(S)
 kubernetes       component=apiserver,provider=kubernetes   <none>                10.254.0.1       443/TCP
 ssh-service1     name=ssh,role=service                     ssh-service=true      10.254.132.107   2222/TCP
 ```
+
 使用describe可以查看到详细信息。可以看到暴露出来的NodePort端口30239。
 
-```
+```shell
 [minion@te-yuab6awchg-0-z5nlezoa435h-kube-master-udhqnaxpu5op ~]$ kubectl describe service ssh-service1 
 Name:           ssh-service1
 Namespace:      default
@@ -43,10 +45,12 @@ Endpoints:      <none>
 Session Affinity:   None
 No events.
 ```
+
 nodePort的工作原理与clusterIP大致相同，是发送到node上指定端口的数据，通过iptables重定向到kube-proxy对应的端口上。然后由kube-proxy进一步把数据发送到其中的一个pod上。
 
 该node的ip为10.0.0.5
-```
+
+``` shell
 [minion@te-yuab6awchg-0-z5nlezoa435h-kube-master-udhqnaxpu5op ~]$ sudo iptables -S -t nat
 ...
 -A KUBE-NODEPORT-CONTAINER -p tcp -m comment --comment "default/ssh-service1:" -m tcp --dport 30239 -j REDIRECT --to-ports 36463
@@ -54,6 +58,7 @@ nodePort的工作原理与clusterIP大致相同，是发送到node上指定端�
 -A KUBE-PORTALS-CONTAINER -d 10.254.132.107/32 -p tcp -m comment --comment "default/ssh-service1:" -m tcp --dport 2222 -j REDIRECT --to-ports 36463
 -A KUBE-PORTALS-HOST -d 10.254.132.107/32 -p tcp -m comment --comment "default/ssh-service1:" -m tcp --dport 2222 -j DNAT --to-destination 10.0.0.5:36463
 ```
+
 可以看到访问node时候的30239端口会被转发到node上的36463端口。而且在访问clusterIP 10.254.132.107的2222端口时，也会把请求转发到本地的36463端口。
 36463端口实际被kube-proxy所监听，将流量进行导向到后端的pod上。
 

@@ -64,7 +64,7 @@ spec:
 
 ### port
 
-- port是k8s集群`内部访问`service的端口(service暴露在Cluster IP上的端口)，即通过`clusterIP: port`可以访问到某个service
+- port是k8s集群`内部访问service的端口`(service暴露在Cluster IP上的端口)，即通过`clusterIP: port`可以访问到某个service
 
 ### nodePort
 
@@ -76,11 +76,11 @@ spec:
 
 ### TargetPort
 
-- targetPort 是pod的端口，从port和nodePort来的流量经过kube-proxy流入到后端pod的targetPort上，最后进入容器。
+- targetPort 是`pod的端口`，从port和nodePort来的流量经过kube-proxy流入到后端pod的targetPort上，最后进入容器。
 
 ### containerPort
 
-- containerPort是pod内部容器的端口，targetPort映射到containerPort。
+- containerPort是`pod内部容器的端口`，`targetPort映射到containerPort`。
 
 ### hostPort
 
@@ -101,6 +101,7 @@ spec:
 ```
 
 这样做有个缺点，因为Pod重新调度的时候该Pod被调度到的宿主机可能会变动，这样就变化了，用户必须自己维护一个Pod与所在宿主机的对应关系。
+
 使用了 hostPort 的容器只能调度到端口不冲突的 Node 上，除非有必要（比如运行一些系统级的 daemon 服务），不建议使用端口映射功能。如果需要对外暴露服务，建议使用 NodePort Service。
 
 总的来说，port和nodePort都是service的端口，前者暴露给集群内客户访问服务，后者暴露给集群外客户访问服务。从这两个端口到来的数据都需要经过反向代理kube-proxy流入后端 pod的targetPod，从而到达pod上的容器内。
