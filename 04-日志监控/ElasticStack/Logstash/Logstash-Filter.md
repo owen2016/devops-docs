@@ -1,5 +1,7 @@
 # 过滤 Filter
 
+- <https://www.elastic.co/guide/en/logstash/current/filter-plugins.html>
+
 logstash直接输入预定义好的 JSON 数据，这样就可以省略掉 filter/grok 配置,但是在我们的生产环境中，日志格式往往使用的是普通的格式，因此就不得不使用插件进行过滤
 
 - grok：采用正则的方式，解析原始日志格式，使其结构化；
@@ -113,7 +115,7 @@ ES Output插件主要的选项包括：
 
 - 结果
 
-  ![](./images/filter-1.png)
+  ![](./_images/filter-1.png)
 
 ### 2. Nginx 访问日志
 
@@ -174,7 +176,7 @@ ES Output插件主要的选项包括：
 
 - 结果
 
-  ![](./images/filter-2.png)
+  ![](./_images/filter-2.png)
 
 ### 3. JAVA Log4j 日志
 
@@ -233,4 +235,4 @@ java.lang.NullPointerException
 小技巧：关于grok的正则匹配，官方有给出[Grok Constructor](http://grokconstructor.appspot.com/)方法，在这上面提供了debugger、自动匹配等工具，方便大家编写匹配规则
 
 - 结果
-  ![](./images/filter-3.png)
+  ![](./_images/filter-3.png)

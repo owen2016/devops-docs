@@ -10,7 +10,7 @@
 
 ## logstash数据流
 
-首先有一个输入数据，例如是一个web.log文件，其中每一行都是一条数据。file imput会从文件中取出数据，然后通过`json codec`将数据转换成`logstash event`。
+首先有一个输入数据，例如是一个web.log文件，其中每一行都是一条数据。file input会从文件中取出数据，然后通过`json codec`将数据转换成`logstash event`。
 
 这条event会通过`queue`流入某一条pipline处理线程中，首先会存放在batcher中。当batcher达到处理数据的条件（如一定时间或event一定规模）后，batcher会把数据发送到filter中，filter对event数据进行处理后转到output，output就把数据输出到指定的输出位置。
 

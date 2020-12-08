@@ -2,7 +2,7 @@
 
 **注意：** 了解目录结构，有助于进行标准化的配置，以及容器挂载路径设置
 
-## .zip和.tar.gz归档目录布局
+## 1. .zip和.tar.gz归档目录布局
 
 .zip和.tar.gz包是完全独立的，默认情况下，所有文件和目录都包含在主目录中——主目录是在解压缩归档文件时创建的目录。
 
@@ -10,12 +10,12 @@
 
 ![structure-1](./_images/structure-1.png)
 
-## Debian和RPM包的目录布局
+## 2. Debian和RPM包的目录布局
 
 Debian软件包和RPM软件包为系统每个地方配置文件、日志和设置文件在适当的位置：
 ![structure-2](./_images/structure-2.png)
 
-## Docker镜像的目录布局
+## 3. Docker镜像的目录布局
 
 Docker镜像是由.tar.gz包创建的，并遵循类似的目录布局。
 ![structure-3](./_images/structure-3.png)

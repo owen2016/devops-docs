@@ -2,6 +2,8 @@
 
 [TOC]
 
+- <https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html>
+
 ## Elasticsearch Output 插件
 
 - <https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html>
