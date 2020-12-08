@@ -104,7 +104,7 @@ apt-get install -y kubelet kubeadm kubectl
 apt-get install -y kubelet=1.18.8-00 kubeadm=1.18.8-00 kubectl=1.18.8-00
 ```
 
-![install-kube](_images/install-kubectl.png)
+![install-kube](https://gitee.com/owen2016/pic-hub/raw/master/202012/install-kubectl.png)
 
 ## 创建 kubernetes 集群
 
@@ -218,7 +218,7 @@ k8s.gcr.io/coredns:1.6.7
 
 init 完后，可以看到如下提示：
 
-![master-init](./_images/master-init.png)
+![master-init](https://gitee.com/owen2016/pic-hub/raw/master/202012/master-init.png)
 
 按照提示在 master 节点执行以下命令: (**否则会出错**)
 
@@ -273,7 +273,7 @@ Calico插件- 参考 <https://docs.projectcalico.org/getting-started/kubernetes/
 
 等待所有的 pod 都是 running 状态，可以看到所有 node 的 status 是 running 的状态，这时 kubernetes 集群就搭建好了。
 
-![node-ready](_images/node-ready.png)
+![node-ready](https://gitee.com/owen2016/pic-hub/raw/master/202012/node-ready.png)
 
 至此3个节点的集群搭建完成，后续可以继续添加node节点，或者部署dashboard、helm包管理工具、EFK日志系统、Prometheus Operator监控系统、rook+ceph存储系统等组件
 
