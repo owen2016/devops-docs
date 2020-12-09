@@ -1,0 +1,8 @@
+1. 之前加好的agent，ip变了之后ａgent一直＂未在线＂　
+    参考：https://blog.csdn.net/fst438060684/article/details/80702272
+
+    错误提示：No entry currently exists in the Known Hosts file for this host. Connections will be denied until th
+
+    原因：~/.ssh/known_hosts这个文件里面没有配置ip机器的know hosts，＂～＂由配置文件/etc/default/jenkins中用户决定
+
+    解决：到该用户下执行ssh，加入knowhost即可

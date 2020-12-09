@@ -1,0 +1,49 @@
+https://www.cnblogs.com/dingjiaoyang/p/9663205.html
+
+备份：
+    普通备份：
+        备份：
+            mongodump -h dbhost -d dbname -o dbdirectory
+            参数说明：
+                -h： MongDB所在服务器地址，例如：127.0.0.1，当然也可以指定端口号：127.0.0.1:27017
+                -d： 需要备份的数据库实例，例如：test
+                -o： 备份的数据存放位置，例如：/home/mongodump/，当然该目录需要提前建立，这个目录里面存放
+
+            例子：
+                mongodump -d youyue -o /root/deploy/db_temp
+        恢复：
+            mongorestore -h dbhost -d dbname --dir dbdirectory
+            参数或名：
+            -h： MongoDB所在服务器地址
+            -d： 需要恢复的数据库实例，例如：test，当然这个名称也可以和备份时候的不一样，比如test2
+            --dir： 备份数据所在位置，例如：/home/mongodump/itcast/
+            --drop： 恢复的时候，先删除当前数据，然后恢复备份的数据。就是说，恢复后，备份后添加修改的数据都会被删除，慎用！(不加的话数据重复报错)
+    
+            例子：
+                mongorestore -h 127.0.0.1:27017 -d youyue --dir /home/user/mongo/youyue/ --drop
+
+    导出成JSON格式或CSV格式的文件：
+        备份：
+            mongoexport -d dbname -c collectionname -o file --type json/csv -f field
+            参数说明：
+                -d ：数据库名
+                -c ：collection名
+                -o ：输出的文件名
+                --type ： 输出的格式，默认为json
+                -f ：输出的字段，如果-type为csv，则需要加上-f "字段名"
+
+            例子：
+                mongoexport --host 127.0.0.1 --port 27017 --username yy --password abc123_yy --collection member --db youyue --out member.json
+
+        恢复：
+            mongoimport -d dbname -c collectionname --file filename --headerline --type json/csv -f field
+            参数说明：
+                -d ：数据库名
+                -c ：collection名
+                --type ：导入的格式默认json
+                -f ：导入的字段名
+                --headerline ：如果导入的格式是csv，则可以使用第一行的标题作为导入的字段
+                --file ：要导入的文件
+
+            例子：
+                 sudo mongoimport -d mongotest -c users --file /home/mongodump/articles.json --type json

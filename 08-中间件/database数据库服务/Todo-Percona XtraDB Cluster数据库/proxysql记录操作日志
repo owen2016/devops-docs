@@ -1,0 +1,19 @@
+配置记录所有操作日志：
+    https://www.cnblogs.com/geek-ace/p/9567366.html
+
+    1)首先，全局启用logging
+        SHOW variables where variable_name = "mysql-eventslog_filename";
+
+        设置：
+            SET mysql-eventslog_filename='queries.log';　
+
+    2)变量需要load到runtime，最后save到磁盘
+        LOAD MYSQL VARIABLES TO RUNTIME;
+        SAVE MYSQL VARIABLES TO DISK;
+
+    3)接下来，创建查询路由规则。如果你需要记录所有的查询，简单配置一下即可：
+        INSERT INTO mysql_query_rules (rule_id, active, username, match_pattern, log,apply) VALUES (1, 1, 'vwork', '.', 1, 0);
+
+    4)现在，加载到runtime并持久化到磁盘即可： 
+        LOAD MYSQL QUERY RULES TO RUNTIME;
+        SAVE MYSQL QUERY RULES TO DISK;

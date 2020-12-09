@@ -1,0 +1,50 @@
+1. 如果是源码安装　https://blog.csdn.net/pg_hgdb/article/details/79811120
+    在第十一步的时候修改/var/postgresql/data/pg_hba.conf 文件
+        第一种：
+            #password_encryption = on 改为 password_encryption = on
+
+            vi /etc/postgresql/9.4/main/pg_hba.conf
+                1.1 注释所有存在的配置
+                1.2 修改配置
+                    # "local" is for Unix domain socket connections only
+                    local   all             all                                     md5
+                1.3 在文档末尾加上以下内容
+                    host    all         all         0.0.0.0/0             md5
+            意思：　要不要输入密码关联 method字段值md5或trust（可信的不需要密码验证）
+
+            结论：method配置为trust永远不需要密码登录，配置成md5需要验证
+
+            具体步骤：
+                进入：sudo -u postgres psql
+                修改：alter user postgres with password '123456'
+
+            DONE问题：
+                这只是解决了远程访问（加ip）加验证的效果，如果本地访问(ip为localhost或者不添加参数)还是不需要密码
+                解决：做1.1 1.2步骤，重启
+
+    添加用户并赋予权限：
+        2.1 进入客户端：
+            sudo -u postgres psql
+        2.2 创建用户"xiaozhang"并设置密码：
+            # create user xiaozhang with password '123456';
+        2.3 创建数据库exampledb，所有者为xiaozhang：
+            # create database exampledb owner xiaozhang;
+        2.4 将exampledb数据库的所有权限赋予xiaozhang，否则xiaozhang只能登录psql，没有任何数据库操作权限：
+            grant all privileges on database exampledb to xiaozhang;
+
+        TODO问题：
+            这样该用户还是有访问所有数据库权限，如何限制只能访问一个数据库
+
+            限制的时候：2.3步骤创建数据库的时候不要指定owner
+                # create database exampledb;
+
+其他：https://www.cnblogs.com/wolaiye320/p/5605486.html
+    添加数据：
+        CREATE TABLE products (
+        product_no integer,
+        name text,
+        price numeric
+        );
+        下面是一个向表中插入一行的例子：
+
+        INSERT INTO products VALUES (1, 'Cheese', 9.99);

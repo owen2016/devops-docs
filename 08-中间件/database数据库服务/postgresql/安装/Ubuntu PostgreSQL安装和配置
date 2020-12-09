@@ -1,0 +1,71 @@
+https://www.cnblogs.com/Siegel/p/6917213.html
+https://www.jianshu.com/p/c608682755a8
+1、安装
+使用如下命令，会自动安装最新版，这里为9.5
+    1.1
+        sudo apt-get install postgresql
+
+        安装完成后，默认会：
+            （1）创建名为"postgres"的Linux用户
+            （2）创建名为"postgres"、不带密码的默认数据库账号作为数据库管理员
+            （3）创建名为"postgres"的表
+    1.2
+        设置数据库密码
+            通过 sudo -u postgres psql 进入，提示符变成： postgres=# 
+            \password：设置密码
+
+    1.3
+        通过密码登录
+            psql -U dbuser -d exampledb -h 127.0.0.1 -p 5432
+            上面命令的参数含义如下：-U指定用户，-d指定数据库，-h指定服务器，-p指定端口。
+            输入上面命令以后，系统会提示输入dbuser用户的密码。
+
+    1.4
+        配置数据库以允许远程连接访问
+            安装完成后，默认只能本地才能连接数据库，其他机子访问不了，需要进行配置。
+
+            1、修改监听地址
+                sudo gedit /etc/postgresql/9.5/main/postgresql.conf 
+                将 #listen_addresses = 'localhost' 的注释去掉并改为 listen_addresses = '*' 
+
+            2、修改可访问用户的IP段
+                sudo gedit /etc/postgresql/9.5/main/pg_hba.conf 
+                在文件末尾添加： host all all 0.0.0.0 0.0.0.0 md5 ，表示运行任何IP连接
+
+            3、重启数据库
+                sudo systemctl restart postgresql
+
+2、导入导出数据库
+    导出：
+        pg_dump -U postgres -h postgresql -p 5432 -f dump.sql registry
+
+        所有：
+            pg_dumpall -U postgres -h postgresql -p 5432 -f dump.sql
+
+    导入：
+        所有：
+            psql -U postgres  -h172.20.58.47 -p 5432  -f /home/user/Documents/harbor/dump.sql postgres
+
+
+psql命令
+    \password：设置密码
+    \q：退出
+    \h：查看SQL命令的解释，比如\h select。
+    \?：查看psql命令列表。
+    \l：列出所有数据库。
+    \c [database_name]：连接其他数据库。
+    \d：列出当前数据库的所有表格。
+    \d [table_name]：列出某一张表格的结构。
+    \du：列出所有用户。
+    \e：打开文本编辑器。
+    \conninfo：列出当前数据库和连接的信息。
+
+卸载:
+    https://www.cnblogs.com/hanshuai/p/8745952.html
+
+
+docker 安装
+    https://www.cnblogs.com/oxspirt/p/9019569.html
+
+    docker pull postgres:9.4
+    docker run --name postgres1 -e POSTGRES_PASSWORD=${password} -p 5432:5432 -v /home/user/Documents/harbor/postgresql_data:/var/lib/postgresql/data -d postgres:9.4 

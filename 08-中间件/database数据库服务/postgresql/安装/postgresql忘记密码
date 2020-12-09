@@ -1,0 +1,17 @@
+https://www.cnblogs.com/wuling129/p/4917574.html
+
+解决方法：
+
+        1、关闭数据库服务
+
+        2、进入数据库的工作空间目录 (如果是建库是没有另外指定，应该就是postgresql安装目录下的 data 目录)
+
+        3、编辑修改文件 pg_hba.conf， 把连接权限设置的 md5 加密方式 改成 trust
+              host    all             all             127.0.0.1/32            trust
+
+        4、从新启动postgresql数据库服务
+
+        5、可以不用密码就能用postgres用户登陆，然后执行修改用户密码的操作                  
+            alter user postgres with password 'foobar';
+
+        6、修改 pg_hba.conf 文件，改回到 md5 方式，再重启数据库服务就ok了

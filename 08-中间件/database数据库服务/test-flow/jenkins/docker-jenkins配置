@@ -1,0 +1,53 @@
+apt安装
+
+机器上需要安装maven，jdk
+
+
+参考mindoc http://172.20.48.231:8181/docs/tools-setup/tools-setup-1b2cc8ips5ihi
+
+１．添加插件
+    Plugin name 　　　　　　　　　　　　　　　　　　　address
+    Role Strategy Plugin    　　　　　　　https://wiki.jenkins.io/display/JENKINS/Role+Strategy+Plugin
+    Git Parameter Plugin    　　　　　　　http://wiki.jenkins-ci.org/display/JENKINS/Git+Parameter+Plugin
+    GitHub Branch Source Plugin 　　　https://wiki.jenkins.io/display/JENKINS/GitHub+Branch+Source+Plugin
+    Parameter Pool Plugin   　　　　　　　https://wiki.jenkins.io/display/JENKINS/Parameter+Pool+Plugin
+    Build With Parameters Plugin   https://wiki.jenkins.io/display/JENKINS/Build+With+Parameters+Plugin
+    Pipeline Plugin 　　　　　　　　　　　　　　　https://wiki.jenkins.io/display/JENKINS/Pipeline+Plugin
+    SSH Slaves plugin   　　　　　　　　　　　https://wiki.jenkins.io/display/JENKINS/SSH+Slaves+plugin
+    Gradle Plugin   　　　　　　　　　　　　　　　https://wiki.jenkins.io/display/JENKINS/Gradle+Plugin
+    Parameterized Trigger Plugin   https://wiki.jenkins.io/display/JENKINS/Parameterized+Trigger+Plugin
+
+
+２．因为是docker启动的
+    所以需要额外挂载：
+        １．ssh目录--验证ssh key
+        ２．hosts文件--域名访问
+
+    sudo docker run \
+          -u root \
+          --rm \
+          -d \
+          -p 8080:8080 \
+          -p 50000:50000 \
+          -v /etc/hosts:/etc/hosts \
+          -v /root/.ssh:/root/.ssh \
+          -v /root/jenkins_data:/var/jenkins_home \
+          -v /var/run/docker.sock:/var/run/docker.sock \
+          jenkinsci/blueocean
+
+３．配置任务
+    参考其他已经配置了的环境
+
+    注意：配置任务的代码地址
+        ssh://git@gitlab.vivo.com:2289/vwork/vwork-backend.git
+
+    １）在jenkins机器上添加全局可执行脚本（https://blog.csdn.net/LinearF/article/details/81383461）
+      １．首先将脚本文件移动到/bin目录下
+      ２．然后加上运行权限　sudo chmod 755 /bin/test-init
+
+
+    ****ｄｏｃｋｅｒ启动的时候需要挂载改文件，和环境变量文件－－ＴＯＤＯ****
+
+ssh://git@gitlab.vivo.com:2289/vwork/vwork-backend.git
+
+sudo docker run           -u root           --rm           -d           -p 8080:8080           -p 50000:50000           -v /etc/hosts:/etc/hosts           -v /root/.ssh:/root/.ssh      -v /bin/test-init:/bin/test-init     -v /root/jenkins_data:/var/jenkins_home           -v /var/run/docker.sock:/var/run/docker.sock           jenkinsci/blueocean

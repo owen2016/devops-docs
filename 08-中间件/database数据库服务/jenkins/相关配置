@@ -1,0 +1,73 @@
+配置工作日下午五点
+    00 17 * * 1-5 
+
+1、关闭Jenkins
+     只需要在访问jenkins服务器的网址url地址后加上exit。例如我jenkins的地址http://localhost:8080/，那么我只需要在浏览器地址栏上敲下http://localhost:8080/exit 网址就能关闭jenkins服务.
+
+2、重启Jenkies
+    http://localhost:8080/restart
+
+3、重新加载配置信息
+    http://localhost:8080/reload
+
+
+４、设置为允许用户注册（https://www.cnblogs.com/zhangyuhang3/p/6901006.html）
+    Manage Jenkins
+        －＞　Configure Global Security
+            －＞　勾选　Enable security
+                勾选  Access Control　－＞Security Realm
+                                            －＞Allow users to sign up
+
+５、修改语言环境（https://blog.csdn.net/qq_15807167/article/details/79896131）
+    ５．１）安装插件
+        Locale plugun
+
+    ５．２）设置
+        Manage Jenkins　－＞　Configure System -> Global properties
+            -> Locale修改
+                Default language: zh_CN
+                勾选：Ignore browser preference and force this language to all users
+
+    ５．３）重启
+
+6、配置用户角色权限（参考：http://172.20.48.231:8181/docs/tools-setup/tools-setup-1b67ljp8q285e）
+    ６．１）添加用户
+        Manage Jenkins－＞Manage　Users－＞Create User
+
+    ６．２）安装插件（介绍：https://wiki.jenkins-ci.org/display/JENKINS/Role+Strategy+Plugin）
+        Role Strategy Plugin
+
+        可搜索或者本地下载好插件上传安装（下载地址：https://updates.jenkins-ci.org/download/plugins/role-strategy/）
+
+        系统管理 > 插件管理 > Advanced.在Upload Plugin tab,点选择文件，然后重启
+
+    ６．３）配置插件
+        
+        安装完插件，重启完jenkins之后，进入系统管理 > Configure Global Security ,配置如下，保存
+
+        勾选Enable security
+        勾选Authorization－＞Role-Based Strategy
+
+    ６．４）配置User/Group权限
+        １．进入系统管理 > Manage and Assign Roles
+
+            Manage Roles：　管理角色
+            Assign Roles：　分配角色
+            Role Strategy Macros：　角色策略宏
+
+        ２．Assign Roles
+            分配全局角色和项目角色
+
+7、配置同时执行多个job
+    https://www.cnblogs.com/zhongyehai/p/10577177.html
+
+    系统管理-节点管理/系统设置， 选择对应节点，点击配置从节点，将“”执行者数量“ 或 of executors 改成大于2 就可以
+
+8、配置某个job并发执行（https://blog.csdn.net/taishanduba/article/details/61423121?utm_source=blogxgwz1）
+    例子：vwork在同一个地方维护flyway，那么build多个服务的时候，如果同时去起的话，会同时运行flyway（执行前后顺序）会
+        　造成版本重复错误
+
+    所以：去掉勾选deploy-service的＂Execute concurrent builds if necessary＂
+
+    解释：Execute concurrent builds if necessary: 如果可以会并发执行build.勾选上后.如果有足够的线程池则会并发,
+        否则不会.并发构建会在不同的workspace中.如果用户自己设置的workspace则不会分开,这个是有风险的. 

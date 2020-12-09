@@ -1,0 +1,17 @@
+https://www.runoob.com/redis/redis-install.html
+
+$sudo apt-get update
+$sudo apt-get install redis-server
+
+1.添加用户名密码
+    ---TODO
+
+2.配置ip访问
+    redis-cli -h 172.20.16.51
+
+    修改配置文件：/etc/redis/redis.conf
+
+        bind: 0.0.0.0
+
+    重启服务：
+        sudo systemctl restart redis

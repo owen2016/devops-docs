@@ -1,0 +1,42 @@
+1. 切换到root用户
+    su root
+
+2.找到解压后源码包里面的一个linux文件
+    cd /home/postgresql/postgresql-10.5/contrib/start-scripts
+
+3.修改linux文件属性，添加X属性
+    chmod a+x linux
+
+4.复制linux文件到/etc/init.d目录下，更名为postgresql
+    cp linux /etc/init.d/postgresql
+
+5.修改/etc/init.d/postgresql文件的两个变量
+    vim /etc/init.d/postgresql
+    #prefix设置为postgresql的安装路径：prefix=/usr/local/postgresql
+    #PGDATA设置为postgresql的数据目录路径：PGDATA="/var/postgresql/data"
+
+6.执行service postgresql start，可以启动PostgreSQL服务
+    service postgresql start
+
+    如果这里执行命令后出现Failed to start postgresql.service: Unit postgresql.service not found.错误
+请检查配置postgres用户的环境变量的时候是否将PATH给export了
+    参考ISSUE
+
+7.设置postgresql服务开机自启动
+    #ubuntu 16.04前版本使用chkconfig命令
+    chkconfig --add postgresql
+    #ubuntu 16.04版本使用sysv-rc-conf命令，可能需要进行安装
+    sysv-rc-conf postgresql on
+
+    1. sysv-rc-conf 离线安装依赖的包 
+    libcurses-perl_1.33-1build1_amd64.deb
+    libterm-readkey-perl_2.33-1build1_amd64.deb
+    libcurses-ui-perl_0.9609-1_all.deb
+    sysv-rc-conf_0.99-7_all.deb
+    从上至下依次安装即可
+    2. 在线安装
+    apt-get install sysv-rc-conf
+
+        安装时候报错E: 无法定位软件包 sysv-rc-conf
+            参考ISSUE
+

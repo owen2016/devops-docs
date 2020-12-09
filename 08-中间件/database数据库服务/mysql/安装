@@ -1,0 +1,64 @@
+https://dev.mysql.com/doc/mysql-apt-repo-quick-guide/en/#repo-qp-apt-install-from-source
+
+＊＊＊第一次安装＊＊＊
+１．添加mysql apt仓库配置
+    １．１）下载配置deb包
+        https://dev.mysql.com/get/mysql-apt-config_0.8.13-1_all.deb
+
+    １．２）执行并配置
+        sudo dpkg -i mysql-apt-config_0.8.13-1_all.deb
+
+        １．２．１）Mysql Server & Cluster
+        １．２．２）选择版本
+        １．２．３）选择OK
+
+    １．３）更新
+        sudo apt-get update
+
+    １．４）安装
+        sudo apt-get install mysql-server
+
+        配置root用户密码
+
+    １．５）服务操作
+        查看服务状态：sudo service mysql status
+        停用服务：sudo service mysql stop
+        启用服务：sudo service mysql start
+
+    问题：
+        １．重新配置后update报错（http://thedaneshproject.com/posts/n-skipping-acquire-of-configured-file-contrib-binary-i386-packages-as-repository-https-download-virtualbox-org-virtualbox-debian-bionic-inrelease-doesnt-support-architecture-i386/）
+            eddychen2@eddychen2-VirtualBox:~$ sudo apt-get update
+            命中:1 http://packages.treasuredata.com/3/ubuntu/xenial xenial InRelease
+            命中:2 http://repo.mysql.com/apt/ubuntu xenial InRelease                                                                                                
+            命中:3 https://download.docker.com/linux/ubuntu xenial InRelease       
+            命中:4 http://cn.archive.ubuntu.com/ubuntu xenial InRelease                                                         
+            命中:5 http://security.ubuntu.com/ubuntu xenial-security InRelease                                                 
+            命中:6 http://cn.archive.ubuntu.com/ubuntu xenial-updates InRelease                                                
+            命中:7 http://cn.archive.ubuntu.com/ubuntu xenial-backports InRelease 
+            获取:8 http://repo.mysql.com/apt/ubuntu xenial/mysql-5.7 Sources [942 B]
+            获取:9 http://repo.mysql.com/apt/ubuntu xenial/mysql-5.7 amd64 Packages [5,662 B]
+            获取:10 http://repo.mysql.com/apt/ubuntu xenial/mysql-5.7 i386 Packages [5,674 B]
+            已下载 12.3 kB，耗时 3秒 (3,179 B/s) 
+            正在读取软件包列表... 完成
+            N: 鉴于仓库 'http://packages.treasuredata.com/3/ubuntu/xenial xenial InRelease' 不支持 'i386' 体系结构，跳过配置文件 'contrib/binary-i386/Packages' 的捕获。
+
+        解决方法：
+            Change：deb https://download.virtualbox.org/virtualbox/debian bionic contrib
+            To：deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian bionic contrib
+        重新update
+
+２．升级（＊＊只能一步步升级，不能跨越升级＊＊）
+    ２．１）重新配置
+        sudo dpkg-reconfigure mysql-apt-config
+
+    ２．２）更新apt 仓库
+        sudo apt-get update
+
+    ２．３）升级
+        sudo apt-get install mysql-server
+
+３．卸载
+    ３．１） sudo apt-get remove mysql-server
+
+    ３．２）remove any other software that was installed automatically with the MySQL server
+        sudo apt-get autoremove

@@ -1,0 +1,46 @@
+配置用户角色权限（参考：http://172.20.48.231:8181/docs/tools-setup/tools-setup-1b67ljp8q285e）
+    １）添加用户
+        Manage Jenkins－＞Manage　Users－＞Create User
+
+    ２）安装插件（介绍：https://wiki.jenkins-ci.org/display/JENKINS/Role+Strategy+Plugin）
+        Role Strategy Plugin
+
+        可搜索或者本地下载好插件上传安装（下载地址：https://updates.jenkins-ci.org/download/plugins/role-strategy/）
+
+        系统管理 > 插件管理 > Advanced.在Upload Plugin tab,点选择文件，然后重启
+
+    ３）配置插件
+        
+        安装完插件，重启完jenkins之后，进入系统管理 > Configure Global Security ,配置如下，保存
+
+        勾选Enable security
+        勾选Authorization－＞Role-Based Strategy
+
+    ４）配置User/Group权限
+        １．进入系统管理 > Manage and Assign Roles
+
+            Manage Roles：　管理角色
+            Assign Roles：　分配角色
+            Role Strategy Macros：　角色策略宏
+
+        ２．Assign Roles
+            分配全局角色和项目角色
+
+
+具体角色配置解析：
+    角色分类：
+        全局角色Global roles
+            默认给所有添加用户配一个全局角色：权限最少包括＂Overall　Read＂权限
+
+        项目角色Project roles（区别于全局，只能有项目相关权限，没有jenkins管理权限配置）
+            配置job pattern需要注意：
+                例如：如果以dev开头就写成　dev.* 一定要加上"."
+
+            注意：prod.*代表匹配以prod开头的内容
+                .*test表示以test结尾的内容项目,我这里统一以prod或者test结尾命名。
+                可以用admin账户重命名不会对构建的项目有影响，而更好的把控权限，通过命名也更好区分。
+                “(?i)roger-.*”表示以roger-开头的项目并且不区分大小写
+
+                pattern详解：https://www.cnblogs.com/wjoyxt/p/6677115.html
+
+        节点角色权限Slave roles

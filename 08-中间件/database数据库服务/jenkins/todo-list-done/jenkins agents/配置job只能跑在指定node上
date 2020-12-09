@@ -1,0 +1,23 @@
+1. 进入job配置页面
+
+2. 在General－＞限制项目的运行节点
+    标签表达式（输入对应node配置的标签即可）
+
+3. 配置规则参考（主要真的同时配置多个标签的情况）
+
+    Supported operators
+    The following operators are supported, in descending order of precedence:
+    (expression)
+    parentheses — used to explicitly define the associativity of an expression
+    !expression
+    NOT — negation; the result of expression must not be true
+    a && b
+    AND — both of the expressions a and b must be true
+    a || b
+    OR — either of the expressions a or b may be true
+    a -> b
+    "implies" operator — equivalent to !a || b.
+    For example, windows -> x64 could be thought of as "if a Windows agent is used, then that agent must be 64-bit", while still allowing this project to be executed on any agents that do not have the windows label, regardless of whether they have also have an x64 label
+    a <-> b
+    "if and only if" operator — equivalent to a && b || !a && !b
+    For example, windows <-> dc2 could be thought of as "if a Windows agent is used, then that agent must be in datacenter 2, but if a non-Windows agent is used, then it must not be in datacenter 2"

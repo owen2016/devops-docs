@@ -1,0 +1,13 @@
+参考：https://www.cnblogs.com/chenjianxiang/p/8479814.html
+
+nginx配置：
+    #资源下载
+    location ~*\.(zip|rar) { 
+        root /home/upload/sourcefile/; 
+    }
+
+重启服务：
+    sudo systemctl restart nginx
+
+浏览器下载：
+    http://<domain>:<port>/xxx.zip

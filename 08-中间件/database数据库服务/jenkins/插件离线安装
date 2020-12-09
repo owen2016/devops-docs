@@ -1,0 +1,8 @@
+https://www.jianshu.com/p/f6aacf057d58
+
+插件下载地址：http://updates.jenkins-ci.org/download/plugins/ 
+
+插件报警时，如何知道下载或更新什么插件：
+    点击报警或报错或提示更新的Correct或者Go to plugin manager进到插件管理界面
+
+    会列出有问题或需要更新的插件，点击名称，进到官网查看对应插件的ID,到下载中心搜索下载

@@ -1,0 +1,6 @@
+https://blog.csdn.net/qq_16605855/article/details/79715993
+
+reload，重新加载的意思，reload会重新加载配置文件，nginx服务不会中断，而且reload时会测试conf语法等，如果出错会rollback用上一次正确配置文件保持正常运行。
+restart，重启，会重启nginx服务。这个重启会造成服务一瞬间的中断，当然如果配置文件出错会导致服务启动失败，那就是更长时间的服务中断了。
+
+所以，根据不同情况使用不同命令最好不过了。

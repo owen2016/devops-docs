@@ -1,0 +1,30 @@
+环境：
+    docker启动的gitlab, ssh端口配置问2289
+    apt安装的jenkins
+
+方法１．jenkins配置git数据源的时候，初步是不需要配置Credentials凭据的
+    可以在jenkins某个用户下（例如：root）＊＊＊配置ssh key，添加到git，确认可以正常拉去git代码＊＊＊，然后修改jenkins配置文件中的用户和用户数组
+
+    可参考：https://www.jianshu.com/p/ed5aab89ce99
+        JENKINS_USER=root
+        JENKINS_GROUP=root
+
+    然后重启jenkins
+        service jenkins restart
+
+    注意：这只是针对一种访问权限，如果需要其他访问权限，建议添加Credentials凭据
+        　或者直接使用超级用户权限
+
+方法２．配置Credentials凭据(ssh方式：如果jenkins运行的用户和用户组是谁，就在谁下面加.ssh/key文件, 然后添加凭据)
+    ２．１配置git用户名密码方式
+        针对http方式拉去代码
+
+        如果project是私有的，就需要配置凭据，输入git用户名密码即可
+     
+    ２．２配置jenkins用户名（自定义）私钥（私钥文件）
+        ssh://git@mc.gitlab.com:2289/test/project.git
+        只对通过ssh方式拉去代码，所以需要指定自定义的端口，外加ssh://
+
+总结：
+    根据jenkins所属用户和用户组，然后查看有没有拉去代码权限即可，添加ssh key都需要在所属用户下
+    http方式就添加凭据，git用户名密码即可

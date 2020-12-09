@@ -1,0 +1,76 @@
+https://blog.csdn.net/dotuian/article/details/46547757
+https://blog.csdn.net/immortal_codefarmer/article/details/76651243
+
+1. 添加超级用户
+    拥有所有数据库管理权限的用户
+        db.createUser({
+            user:"root",
+            pwd:"root123",
+            roles:[
+                "userAdminAnyDatabase"
+            ]
+        })
+
+    特定数据库管理权限的用户－－待验证
+         use "数据库名"
+        db.createUser({
+            user : "用户名",
+            pwd  : "密码",
+            roles : [
+                {
+                    role : "userAdmin",
+                    db : "数据库名"
+                }
+            ]
+        })
+
+    一般用户－－待验证
+        db "数据库名"
+        db.createUser({
+            user : "用户名",
+            pwd  : "密码",
+            roles: [
+                {
+                    role : "read",  # or "readWrite"
+                    db : "数据库名",
+                }
+            ]
+        })
+
+验证：
+    db.auth("root","root123")
+
+    返回1表示正常
+
+关闭和重启服务
+    关闭：mongod --config /etc/mongod.conf --shutdown
+
+    启动：mongod --config /etc/mongod.conf &
+
+删除用户
+    use "数据库名"
+    db.system.users.remove({user: "要删除的用户名"})
+
+其他操作：
+
+        １、使用系统服务脚本方式停止mongod
+                # ps -ef|grep mongod
+                root   5675  1  3 19:33 ?   00:00:00 /var/lib/mongodb/bin/mongod --config=/var/lib/mongodb/conf/rs2.conf
+                root       5689   4950  0 19:33 pts/3    00:00:00 grep mongod
+                [root@node3 conf]# 
+                [root@node3 conf]# service mongod stop
+                Stopping mongodb:                                          [  OK  ]
+        
+        ２、db.shutdownServer()方式
+                # mongo localhost:27000
+                > use admin
+                > db.shutdownServer()
+        
+        ３、使用命令行方式关闭(补充@20160901)
+                # mongod -f /etc/mongo-m.conf  --shutdown
+        
+        5４、强制关闭mongod
+                # kill -9 5675
+                缺点：
+                数据库直接关闭
+                数据丢失

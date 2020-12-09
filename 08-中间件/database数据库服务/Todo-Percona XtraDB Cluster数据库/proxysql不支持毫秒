@@ -1,0 +1,10 @@
+在proxysql（6032）里运行：
+    show variables like '%mysql-server_version%';
+
+    查看这个变量，默认应该是5.5.30，所以就不支持毫秒。
+
+    然后set成当前我们mysql server的版本：
+        set mysql-server_version = '5.7.25';
+
+具体环境上Mysql的版本这里可以看：
+    mysql -uroot -proot

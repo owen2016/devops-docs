@@ -1,0 +1,56 @@
+参考： https://blog.csdn.net/qq_33285112/article/details/78719969
+
+测试准备工作：
+    目标：测试本地切换代码到指定tag
+
+    方法：
+        １）：git checkout 0.12.1
+
+            提示：
+                Note: checking out '0.12.1'.
+
+                You are in 'detached HEAD' state. You can look around, make experimental
+                changes and commit them, and you can discard any commits you make in this
+                state without impacting any branches by performing another checkout.
+
+                If you want to create a new branch to retain commits you create, you may
+                do so (now or later) by using -b with the checkout command again. Example:
+
+                  git checkout -b new_branch_name
+
+                HEAD is now at 3df10d9... Merge branch 'develop' into 'master'　
+
+            控制台显示：
+                user@wt01295-48:~/Desktop/ssh-now/vwork/vwork-backend/vwork-customer$ git branch 
+                * (detached from 0.12.1)
+                  develop
+                  test_branch1
+
+            缺点：
+                切换到tag历史记录 会使当前指针处在分离头指针状态，这个时候的修改是很危险的，在切换回主线时如果没有合并，之前的修改提交基本都会丢失
+
+        ２）：git checkout -B branch_name 0.12.1
+            为什么加-B呢？如果当前仓库中，已经存在一个跟你新建分支同名的分支，那么使用普通的git checkout -b 这个命令，是会报错的，且同名分支无法创建。如果使用-B参数，那么就可以强制创建新的分支，并会覆盖掉原来的分支
+
+1.我们进入我们目标Jenkins任务，选择【参数化构建过程】-》【添加参数】-》【Git Parameter Plug-In】
+    ＊原来添加branch的地方，去掉branch参数＊
+
+    １．１）添加Git Parameter
+        Name: Tag
+        Parameter Type: Tag
+
+    １．２）删除branch配置参数
+
+    １．３）修改Source Code Management
+        Branches to build修改为
+            ${Tag}或$Tag
+
+    ***此时拉取的代码就是指定tag的代码，不需要额外工作***
+
+    １．４）检查代码是否是正确的tag部分
+        进入代码存放地方，用git命令查看
+            
+            jenkins代码存储的工作空间路径(https://blog.csdn.net/ZZY1078689276/article/details/77485615)
+            【系统管理】－＞【系统设置】－＞默认： /var/lib/jenkins
+
+              /var/lib/jenkins/workspace

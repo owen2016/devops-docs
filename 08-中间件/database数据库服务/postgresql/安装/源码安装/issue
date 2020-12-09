@@ -1,0 +1,14 @@
+1.报错
+    Failed to start postgresql.service: Unit postgresql.service not found
+
+
+2.E: 无法定位软件包 sysv-rc-conf
+
+    https://blog.csdn.net/sw1009374593/article/details/84929494
+
+    /etc/apt/sources.list添加一行
+        deb http://archive.ubuntu.com/ubuntu/ trusty main universe restricted multiverse
+
+    #sudo apt-get update  
+
+    #sudo apt-get install sysv-rc-conf 

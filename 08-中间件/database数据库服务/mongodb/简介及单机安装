@@ -1,0 +1,182 @@
+NoSQL(NoSQL = Not Only SQL )，意即"不仅仅是SQL"。
+NoSQL用于超大规模数据的存储。（例如谷歌或Facebook每天为他们的用户收集万亿比特的数据）。这些类型的数据存储不需要固定的模式，无需多余操作就可以横向扩展。
+MongoDB 是由C++语言编写的，是一个基于分布式文件存储的开源数据库系统。在高负载的情况下，添加更多的节点，可以保证服务器性能。
+
+
+RDBMS vs NoSQL
+RDBMS 
+    - 高度组织化结构化数据 
+    - 结构化查询语言（SQL） (SQL) 
+    - 数据和关系都存储在单独的表中。 
+    - 数据操纵语言，数据定义语言 
+    - 严格的一致性
+    - 基础事务
+
+NoSQL 
+    - 代表着不仅仅是SQL
+    - 没有声明性查询语言
+    - 没有预定义的模式
+    -键 - 值对存储，列存储，文档存储，图形数据库
+    - 最终一致性，而非ACID属性
+    - 非结构化和不可预知的数据
+    - CAP定理 
+    - 高性能，高可用性和可伸缩性
+    缺点:
+        - 没有标准化
+        - 有限的查询功能（到目前为止）
+        - 最终一致是不直观的程序
+
+关系型数据库遵循ACID规则
+    事务在英文中是transaction，和现实世界中的交易很类似，它有如下四个特性：
+        1、A (Atomicity) 原子性
+        原子性很容易理解，也就是说事务里的所有操作要么全部做完，要么都不做，事务成功的条件是事务里的所有操作都成功，只要有一个操作失败，整个事务就失败，需要回滚。
+        比如银行转账，从A账户转100元至B账户，分为两个步骤：1）从A账户取100元；2）存入100元至B账户。这两步要么一起完成，要么一起不完成，如果只完成第一步，第二步失败，钱会莫名其妙少了100元。
+
+        2、C (Consistency) 一致性
+        一致性也比较容易理解，也就是说数据库要一直处于一致的状态，事务的运行不会改变数据库原本的一致性约束。
+        例如现有完整性约束a+b=10，如果一个事务改变了a，那么必须得改变b，使得事务结束后依然满足a+b=10，否则事务失败。
+
+        3、I (Isolation) 独立性
+        所谓的独立性是指并发的事务之间不会互相影响，如果一个事务要访问的数据正在被另外一个事务修改，只要另外一个事务未提交，它所访问的数据就不受未提交事务的影响。
+        比如现有有个交易是从A账户转100元至B账户，在这个交易还未完成的情况下，如果此时B查询自己的账户，是看不到新增加的100元的。
+
+        4、D (Durability) 持久性
+        持久性是指一旦事务提交后，它所做的修改将会永久的保存在数据库上，即使出现宕机也不会丢失。
+
+
+mongodb安装包下载地址：
+    http://www.mongodb.org/downloads
+
+单机版安装(以16.04 LTS版本为例)
+    apt安装：
+        1.导入public key
+            # wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
+
+        2.创建 /etc/apt/sources.list.d/mongodb-org-4.2.list 文件
+            # echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
+
+        3.更新本地源信息
+            # apt-get update
+
+        4.安装
+            4.1 安装最新版本
+                # sudo apt-get install -y mongodb-org
+            4.2 安装指定版本
+                # sudo apt-get install -y mongodb-org=4.2.0 mongodb-org-server=4.2.0 mongodb-org-shell=4.2.0 mongodb-org-mongos=4.2.0 mongodb-org-tools=4.2.0
+
+                安装指定版本的时候，你必须单独指定每个组件包以及版本号
+
+                如果您只安装mongodb-org = 4.2.0并且不包含组件包，则无论您指定的是哪个版本，都将安装每个MongoDB软件包的最新版本。
+
+            4.3 可选的。 虽然您可以指定任何可用的MongoDB版本，但apt-get会在新版本可用时升级软件包。 为防止意外升级，您可以将软件包固定在当前安装的版本上：
+                echo "mongodb-org hold" | sudo dpkg --set-selections
+                echo "mongodb-org-server hold" | sudo dpkg --set-selections
+                echo "mongodb-org-shell hold" | sudo dpkg --set-selections
+                echo "mongodb-org-mongos hold" | sudo dpkg --set-selections
+                echo "mongodb-org-tools hold" | sudo dpkg --set-selections
+
+        5.启动服务
+            # sudo service mongod start
+
+            检查mongodb是否启动成功
+                查看日志文件/var/log/mongodb/mongod.log
+                    [initandlisten] waiting for connections on port 27017
+
+            5.1 关闭服务
+                sudo service mongod stop
+
+            5.2 重启服务
+                sudo service mongod restart
+
+            5.3 开始使用mongo
+                # mongo
+
+        6. 卸载mongo社区版本
+            6.1 关闭服务
+                # sudo service mongod stop
+
+            6.2 移除所有已安装的mongo包
+                # sudo apt-get purge mongodb-org*
+
+            6.3 删除数据文件
+                # sudo rm -r /var/log/mongodb
+                # sudo rm -r /var/lib/mongodb
+
+    deb软件包安装：
+        https://repo.mongodb.org/apt/ubuntu/dists/
+        https://www.mongodb.com/download-center/community
+
+        下载deb包：http://www.mongodb.org/downloads
+        １．选择server, shell对于系统和版本下载
+
+        ２．安装
+            dpkg -i mongodb-org-server_4.2.0_amd64.deb
+            dpkg -i mongodb-org-shell_4.2.0_amd64.deb
+
+            提前写好mongod.conf配置文件
+            启动：mongod --config /etc/mongod.conf &
+
+        ３．相关工具安装
+            dpkg -i mongodb-org-tools_4.2.0_amd64.deb
+
+    tar包安装：（通过配置文件启动：https://blog.csdn.net/qq_35285375/article/details/86062078）
+        1. 安装依赖
+            # sudo apt-get install libcurl3 openssl
+
+        2. 下载安装包
+            https://www.mongodb.com/download-center?jmp=docs#production
+            https://www.mongodb.com/download-center/community
+
+            wget ${url}
+
+        3. 解压
+            tar -zxvf mongodb-linux-x86_64-×××××.tgz 
+
+        4. 可选部分
+            确保二进制文件位于PATH环境变量中列出的目录中。
+
+            export PATH=<mongodb-install-directory>/bin:$PATH
+
+            或者：
+                将这些二进制文件复制到PATH变量中列出的目录中，例如/ usr / local / bin或
+                从PATH变量中列出的目录创建指向每个二进制文件的符号链接。
+
+        5. 运行
+            5.1 创建数据和日志目录
+                sudo mkdir -p /data/db
+                sudo mkdir -p /var/log/mongodb
+
+            5.2 运行mongodb
+                sudo mongod --dbpath /data/db --logpath /var/log/mongodb/mongod.log --bind_ip=0.0.0.0 --fork
+
+                配置文件运行：
+                    配置文件为mongodb.conf
+                    # mongod -f mongodb.conf &
+            
+            5.3 验证是否部署成功
+                查看日志文件/var/log/mongodb/mongod.log:
+                    [initandlisten] waiting for connections on port 27017
+
+        6. 连接
+            mongo --host 127.0.0.1 -u ${username} -p {password}
+
+        7. 关闭服务
+            > use admin;
+            switched to db admin
+            > db.shutdownServer();
+            Wed Nov 14 06:07:33 DBClientCursor::init call() failed
+            Wed Nov 14 06:07:33 query failed : admin.$cmd { shutdown: 1.0 } to: 127.0.0.1:27017
+            server should be down...
+            Wed Nov 14 06:07:33 trying reconnect to 127.0.0.1:27017
+            Wed Nov 14 06:07:33 reconnect 127.0.0.1:27017 failed couldnt connect to server 127.0.0.1:27017
+
+
+其他操作：
+    1、添加用户
+        create db schema and db owner
+        mongo
+        > use youyue
+        > db.createUser({user: 'yy', pwd: 'abc123_yy', roles: [{role: 'dbOwner', db: 'youyue'}]})
+
+        连接：
+            mongo 172.20.16.51:27017/youyue -u yy -p abc123_yy

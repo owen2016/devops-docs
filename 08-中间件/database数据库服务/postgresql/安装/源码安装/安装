@@ -1,0 +1,133 @@
+https://blog.csdn.net/lc_2014c/article/details/84189162
+Ubuntu下编译安装postgreSQL 10.5
+
+ubuntu 18.04 LTS系统
+postgreSQL 10.5
+
+1.现在对应源码
+    https://www.postgresql.org/ftp/source/
+
+    wget https://ftp.postgresql.org/pub/source/v10.5/postgresql-10.5.tar.gz
+
+2.解压
+    tar zxvf postgresql-10.5.tar.gz
+    cd postgresql-10.5
+
+3.检查环境配置
+    #创建postgreSQL的***安装***目录
+    mkdir /usr/local/postgresql
+    #安装依赖
+    apt-get install -y libreadline-gplv2-dev zlib1g-dev
+    #检查环境配置--prefix是指定postgreSQL安装路径
+    ./configure --prefix=/usr/local/postgresql
+
+    解决环境配置检查过程中出现的依赖问题
+        1. 出现readline library not found依赖的解决
+            解决方法：
+                有网络：apt-get install -y libreadline-gplv2-dev
+                无网络：下载软件包使用dpkg命令安装 ，可在网站pkgs.org上下载
+                libtinfo-dev_6.0+20160213-1ubuntu1_amd64.deb
+                libreadline-gplv2-dev_5.2+dfsg-3build1_amd64.deb
+
+        2. 出现zlib library not found依赖问题的解决
+            有网络：apt-get install zlib1g-dev
+            无网络：下载软件包
+                zlib1g-dev_1.2.8.dfsg-2ubuntu4_amd64.deb
+
+4.再次重新检查环境
+    ./configure --prefix=/usr/local/postgresql
+
+5.编译安装
+    make && make install
+
+6.安装contrib目录下的一些工具，是第三方组织的一些工具代码，建议安装
+    cd contrib
+    make && make install
+
+7.添加用户
+    #如果直接只用useradd添加用户的话,可能出现没有home下的文件夹
+    #可以使用adduser 命令
+    adduser postgres
+
+8.赋予 postgres用户相关文件夹权限
+    #创建postgreSQL数据存放位置
+    ## postgreSQL有些配置文件将数据的存放位置指向 /usr/local/postgresql/data，
+    ## 可以将将数据的存放位置创建在 /usr/local/postgresql下，可以省去后面一些配置的修改
+    mkdir -p /var/postgresql/data
+    ## 日志存放
+    mkdir -p /var/postgresql/logs
+    # 给postgres用户赋予文件夹的所属权限和读写
+    chown -R postgres:postgres /usr/local/postgresql
+    chown -R postgres:postgres /var/postgresql
+
+    chmod -R 775 /var/postgresql/*
+
+9.配置postgres用户环境变量（需要配置成永久生效的）
+    #切换至postgres用户
+    su - postgres
+    #修改配置文件
+    vim ~/.profile
+    # 添加以下内容和修改PATH
+    export PGHOME=/usr/local/postgresql
+    export PGDATA=/var/postgresql/data
+    export PGHOST=/tmp
+    export PATH="$HOME/bin:$HOME/.local/bin:$PATH:$PGHOME/bin"
+    export MANPATH=$PGHOME/share/man:$MANPATH
+    export LANG=en_US.utf8
+    export DATE=`date +"%Y-%m-%d %H:%M:%S"`
+    export LD_LIBRARY_PATH=$PGHOME/lib:$LD_LIBRARY_PATH
+    #下面只是启动服务的快捷配置，可不用配置
+    #alias pg_start='pg_ctl start -D $PGDATA'
+    #alias pg_stop='pg_ctl stop -D $PGDATA -m fast'
+
+10.启动数据库
+    #初始化数据库
+    initdb -D /var/postgresql/data
+    #启动服务
+    pg_ctl -D /var/postgresql/data -l /var/postgresql/logs/logfile start
+    #连接数据库
+    psql 
+    #创建数据库 
+    create database test; 
+    #创建表
+    create table t_user (id integer, name text); 
+    #插入测试数据
+    insert into t_user values (1,'joke');
+    #查询数据
+    select * from t_user ;
+    #退出psql窗口
+    \q
+
+11.修改监听所有网络以及数据库连接数
+    # 修改配置文件
+    vim /var/postgresql/data/postgresql.conf 
+    # listen_addresses = ‘localhost’ 监听本机，'*'监听所有网络
+    listen_addresses = '*' 
+    #max_connections 数据库的连接数根据具体需求更改 
+
+    vim /var/postgresql/data/pg_hba.conf 
+        #在文件的最下方加上下面的这句话
+        host    all         all         0.0.0.0/0             trust
+
+    防火墙开启端口
+        # 切换root用户
+        su root
+        # 防火墙 允许5432 端口
+        ufw allow 5432
+
+    重启连接：
+        psql -U postgres -h 172.20.249.8
+
+12.重启postgreSQL服务
+    # 切换postgres用户
+    su postgres
+    #重启服务
+    pg_ctl -D /var/postgresql/data -l /var/postgresql/logs/logfile restart
+
+    #停止服务
+    pg_ctl -D /var/postgresql/data -l /var/postgresql/logs/logfile stop
+
+
+其他：
+    修改密码：
+        alter user 登录名 with password 密码

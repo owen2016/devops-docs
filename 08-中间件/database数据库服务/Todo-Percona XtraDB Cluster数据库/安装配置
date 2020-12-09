@@ -1,0 +1,55 @@
+１．简介描述
+    架构：
+       １．节点Percorna XtraDB同步/互相备份。这不是一个主-副本模式
+       ２．通过使用中间件——ProxySQL层,实现读和写分离。我们配置2个读节点和1个写节点
+       ３．ProxySQL分配读和写到相关节点。应用程序不会直接连接到任何节点
+       ４．ProxySQL提供jdbc协议。应用程序使用普通的jdbc驱动连接到它
+
+    功能点：
+        １．同步数据
+            数据会同时写入所有节点,或者不写，如果在一个节点上失败了。
+
+        ２．多主复制
+            任何节点都可以触发数据更新。
+
+        ３．准确平行复制
+            多个线程在从行级别上执行复制
+
+        ４．自动节点
+            只需添加一个节点,它会自动同步
+
+        ５．数据同步
+            没有不同步的节点
+
+        ６．PXC 严格模式
+            避免使用实验性的和不支持的功能。
+
+        ７．ProxySQL配置脚本
+            Percona提供了一个与proxysql-admin ProxySQL包工具,自动配置Percona XtraDB集群节点。
+
+        ８．自动配置SSL加密
+            Percona XtraDB集群包括pxc-encrypt-cluster-traffic变量,使自动配置SSL encrytion
+
+        ９．优化性能
+            Percona XtraDB集群性能优化与生产工作负载增长规模。
+
+            １）我们如何使Percona XtraDB集群规模
+                https://www.percona.com/blog/2017/04/19/how-we-made-percona-xtradb-cluster-scale/
+            ２）性能改进Percona 5.7.17-29.20 XtraDB集群
+                https://www.percona.com/blog/2017/04/19/performance-improvements-percona-xtradb-cluster-5-7-17/
+
+    限制：
+        １．只能使用InnoDB存储引擎
+
+２．安装（版本5.7）
+    https://www.percona.com/doc/percona-xtradb-cluster/5.7/index.html#
+
+    Node    Host    IP
+    Node 1  pxc1    192.168.70.61
+    Node 2  pxc2    192.168.70.62
+    Node 3  pxc3    192.168.70.63
+
+    １．前提条件
+        １）必须有root权限
+
+        ２）确保3306，4444，4567，4568端口不会被防火墙阻止，也没有被其他服务占用　　

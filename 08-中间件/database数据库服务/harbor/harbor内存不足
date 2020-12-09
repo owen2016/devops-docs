@@ -1,0 +1,20 @@
+１．登录到harbor admin管理界面,清除多余镜像tag(软连, 一级一级的删除)
+
+２．登录到harbor服务宿主机器执行命令：
+    在部署Harbour的主机上运行以下命令以预览会影响哪些文件/镜像 
+       注：上述选项”–dry-run”将打印进度而不删除任何数据。
+        docker run -it --name gc --rm --volumes-from registry vmware/registry-photon:v2.6.2-v1.5.0 garbage-collect --dry-run /etc/registry/config.yml
+    
+    # 以下命令执行垃圾回收
+        docker run -it --name gc --rm --volumes-from registry vmware/registry-photon:v2.6.2-v1.5.0 garbage-collect /etc/registry/config.yml
+
+３．关闭服务
+    docker-compose down
+
+４．删除数据
+    rm -rf /data/*
+
+５．重启
+    ./instal.sh
+
+６．重建仓库，并上传镜像

@@ -1,0 +1,8 @@
+https://www.cnblogs.com/kevingrace/p/6547616.html
+
+问题(之类):
+    May 27 01:01:18 172.19.0.1 registry[2960]: configuration error: open /etc/registry/config.yml: permission denied
+
+    解决:
+        防止容器进程没有权限读取生成的配置
+            # chmod -R 777 common

@@ -1,0 +1,34 @@
+https://www.cnblogs.com/jsonhc/p/7372359.html
+
+预备环境：
+    １．安装好了jdk
+    ２．有拉取代码权限，安装了docker
+
+１．添加node
+    １．１　进入添加配置页面
+        Manage Jenkins -> Manage Nodes -> New Node
+
+    １．２　配置
+        Name：　node-172.20.53.29
+        Description：　node-172.20.53.29
+        Remote root directory：　/home/user/jenkins_workspace　（自定义，具有访问权限）
+        Usage：Use this node as much as possible
+        Launch method：Launch agent agents via SSH
+            Host：172.20.53.29
+            Credentials：　user/abc123_(user-172.20.53.29)
+
+    １．３　保存
+
+    １．４　点击Launch agent，查看日志
+
+
+２．问题记录
+    https://blog.csdn.net/csfreebird/article/details/41119015
+
+    报错：
+        ERROR: Unexpected error in launching an agent. This is probably a bug in Jenkins
+
+    解决方法：
+        重新到slave的配置页面，手动保存一下证书然后保存即可
+
+        credentials -> user/****** (user-172.20.53.29) -> Update -> Save

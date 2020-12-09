@@ -1,0 +1,20 @@
+1. 用用户名和密码登录报错　errmsg: "Auth mechanism not specified"
+
+    https://blog.csdn.net/u012903926/article/details/96910892
+
+    原因：
+        MongoDB server 版本是4.0.10，客户端版本是 2.6.10
+
+    操作回忆：
+        之前只安装了server和shell，没有tools，所以执行mongodump和mongoimport时报错
+
+        所以安装提示直接安装了：apt-get install mongodb-clients
+
+    解决：
+        删除 之前的 mongodb-clients
+            apt-get purge mongodb-clients
+
+        重新安装server,shell,tools
+            dpkg -i mongodb-org-server_4.2.0_amd64.deb
+            dpkg -i mongodb-org-shell_4.2.0_amd64.deb
+            dpkg -i mongodb-org-tools_4.2.0_amd64.deb

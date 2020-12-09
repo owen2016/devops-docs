@@ -1,0 +1,109 @@
+https://jenkins.io/doc/　－＞　https://jenkins.io/doc/book/installing/
+
+安装方法一：
+    WAR file 
+
+    １．安装前准备
+        Java 8 (either a JRE or Java Development Kit (JDK) is fine)
+
+        Docker
+
+    ２．下载：http://mirrors.jenkins.io/war-stable/latest/jenkins.war
+
+    ３．执行命令
+        java -jar jenkins.war --httpPort=8080
+
+    ４．浏览器打开http://localhost:8080
+
+    ５．初始化密码的地方（用户名：admin）
+        /home/eddychen3/.jenkins/secrets/initialAdminPassword
+
+    ６．注意点：数据默认保存
+      ＊＊＊保存在：/home/eddychen3/.jenkins目录下面＊＊＊
+                  用户主目录
+
+安装方法二：
+    ｄｏｃｋｅｒ安装
+
+    １．安装前准备
+        Docker
+
+    ２．下载镜像
+        docker pull jenkinsci/blueocean
+
+    ３．运行镜像 （＼后面不能有空格）
+        sudo docker run \
+          -u root \
+          --rm \
+          -d \
+          -p 8080:8080 \
+          -p 50000:50000 \
+          -v jenkins-data:/var/jenkins_home \
+          -v /var/run/docker.sock:/var/run/docker.sock \
+          jenkinsci/blueocean
+
+    ４．初始化密码存储目录
+      /var/jenkins_home/secrets/initialAdminPassword
+
+安装方法三：
+    apt安装
+
+    Java 8 (either a JRE or Java Development Kit (JDK) is fine)
+
+    １．直接安装
+        wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+        sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+        sudo apt-get update
+        sudo apt-get install jenkins
+
+    ２．可选：设置指定版本
+        sudo apt-get install jenkins=2.138.1
+
+        如果下载太慢
+            先手动下载，再安装
+            https://pkg.jenkins.io/debian/
+
+    ３．查看日志
+      /var/log/jenkins/jenkins.log
+
+    问题及解决方案：
+      问题１：
+        install 的时候报错
+          invoke-rc.d: initscript jenkins, action "start" failed.
+          ● jenkins.service - LSB: Start Jenkins at boot time
+             Loaded: loaded (/etc/init.d/jenkins; bad; vendor preset: enabled)
+             Active: failed (Result: exit-code) since Fri 2019-04-26 16:38:53 CST; 6ms ago
+               Docs: man:systemd-sysv-generator(8)
+            Process: 32598 ExecStart=/etc/init.d/jenkins start (code=exited, status=1/FAILURE)
+
+          Apr 26 16:38:53 172-20-53-204 systemd[1]: Starting LSB: Start Jenkins at boot time...
+          Apr 26 16:38:53 172-20-53-204 jenkins[32598]: ERROR: No Java executable found in current PATH: /bin:/usr/bin:/sbin:/usr/sbin
+          Apr 26 16:38:53 172-20-53-204 jenkins[32598]: If you actually have java installed on the system make sure the executable is in the aforementio...ble path
+          Apr 26 16:38:53 172-20-53-204 systemd[1]: jenkins.service: Control process exited, code=exited status=1
+          Apr 26 16:38:53 172-20-53-204 systemd[1]: Failed to start LSB: Start Jenkins at boot time.
+          Apr 26 16:38:53 172-20-53-204 systemd[1]: jenkins.service: Unit entered failed state.
+          Apr 26 16:38:53 172-20-53-204 systemd[1]: jenkins.service: Failed with result 'exit-code'.
+          Hint: Some lines were ellipsized, use -l to show in full.
+          dpkg: error processing package jenkins (--configure):
+           subprocess installed post-installation script returned error exit status 1
+          Errors were encountered while processing:
+           jenkins
+          E: Sub-process /usr/bin/dpkg returned an error code (1)
+        解决方法：（https://blog.csdn.net/yi_suo_yan_yu/article/details/81981789）
+          在/usr/bin下添加java可执行文件软连接
+
+          ln -s /root/jdk/bin/java /usr/bin/java
+
+
+＊＊＊推荐使用apt安装＊＊＊
+
+  升级：
+    sudo apt-get update
+    sudo apt-get install jenkins
+
+
+其他细节点：
+  １．jenkins代码存储的工作空间路径(https://blog.csdn.net/ZZY1078689276/article/details/77485615)
+    【系统管理】－＞【系统设置】－＞默认： /var/lib/jenkins
+
+      /var/lib/jenkins/workspace

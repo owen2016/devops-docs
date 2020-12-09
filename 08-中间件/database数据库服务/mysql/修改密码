@@ -1,0 +1,18 @@
+１．）修改用户名
+    mysql> use mysql;  选择数据库
+    Database changed
+    mysql> update user set user="dns" where user="root";    将用户名为root的改为dns
+    mysql> flush privileges;
+
+２．）修改密码
+    ２．１）用UPDATE直接编辑user表 
+        mysql> use mysql; 
+        mysql> update user set password=password('123') where user='root' and host='localhost'; 
+        mysql> flush privileges; 
+
+    ２．２）用mysqladmin 
+        前提该用户必须要有权限
+
+        sudo mysqladmin -uuser3 -p123 password root3
+
+        实时生效

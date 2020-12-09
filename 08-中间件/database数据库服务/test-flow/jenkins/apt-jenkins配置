@@ -1,0 +1,19 @@
+ssh配置
+host配置
+
+
+１．修改配置（可参考：https://www.jianshu.com/p/ed5aab89ce99）
+    vim /etc/default/jenkins
+
+    JENKINS_USER=root
+    JENKINS_GROUP=root
+
+    # 根据实际情况修改JENKINS_HOME配置
+    JENKINS_HOME=***
+
+    # 重启服务
+    service jenkins restart
+
+不修改git配置会访问不到
+
+docker run --rm -v /data01/.m2/local:/root/.m2 -v /var/lib/jenkins/workspace/dev-build-vwork-backend-common-dependencies:/root vwork.harbor.com/base/builder mvn clean install -Dmaven.test.skip=true
