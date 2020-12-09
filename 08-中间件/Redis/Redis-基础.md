@@ -143,3 +143,6 @@ $ src/redis-cli
 参考： [https://ywnz.com/linuxrj/3349.html](https://ywnz.com/linuxrj/3349.html)
 [https://www.cnblogs.com/xxoome/p/7121042.html](https://www.cnblogs.com/xxoome/p/7121042.html)
 [https://www.cnblogs.com/zongfa/p/7808807.html](https://www.cnblogs.com/zongfa/p/7808807.html)
+
+
+https://www.cnblogs.com/langtianya/p/5187681.html
