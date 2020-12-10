@@ -1,4 +1,0 @@
-1. MySQL加载并执行SQL脚本文件
-    第一种方法: 命令行下(未连接数据库) ,mysql -h localhost -u root -p123456 < C:\db.sql
-
-    第二种方法: 命令行下(已连接数据库,此时的提示符为 mysql>: ), 输入 source C:\db.sql

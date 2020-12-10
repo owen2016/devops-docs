@@ -1,12 +1,110 @@
-# mysql命令行
+# MySQL 操作
 
-https://www.cnblogs.com/ellisonzhang/p/12175506.html
+## 加载执行SQL语句
+
+- 第一种方法: 命令行下(未连接数据库)
+
+  `mysql -h localhost -u root -p123456 < C:\db.sql`
+
+  `mysql  -hhostname -Pport -uusername -ppassword  -e`
+
+- 第二种方法: 命令行下(已连接数据库,此时的提示符为 mysql>: ), 输入 source C:\db.sql
+
+## 日常操作
+
+``` shell
+#!/bin/bash
+
+HOSTNAME="192.168.111.84"  #数据库信息
+PORT="3306"
+USERNAME="root"
+PASSWORD=""
+
+DBNAME="test_db_test"  #数据库名称
+TABLENAME="test_table_test"   #数据库中表的名称
+```
+
+### 创建数据库
+
+``` shell
+create_db_sql="create database IF NOT EXISTS ${DBNAME}"
+mysql -h${HOSTNAME}  -P${PORT}  -u${USERNAME} -p${PASSWORD} -e "${create_db_sql}"
+```
+
+### 创建表
+
+``` shell
+create_table_sql="create table IF NOT EXISTS ${TABLENAME} (  name varchar(20), id int(11) default 0 )"
+mysql -h${HOSTNAME}  -P${PORT}  -u${USERNAME} -p${PASSWORD} ${DBNAME} -e "${create_table_sql}"
+```
+
+### 插入数据
+
+``` shell
+insert_sql="insert into ${TABLENAME} values('billchen',2)"
+mysql -h${HOSTNAME}  -P${PORT}  -u${USERNAME} -p${PASSWORD} ${DBNAME} -e "${insert_sql}"
+```
+
+### 查询
+
+``` shell
+select_sql="select * from ${TABLENAME}"
+mysql -h${HOSTNAME}  -P${PORT}  -u${USERNAME} -p${PASSWORD} ${DBNAME} -e "${select_sql}"
+```
+
+### 更新数据
+
+``` shell
+update_sql="update ${TABLENAME} set id=3"
+mysql -h${HOSTNAME}  -P${PORT}  -u${USERNAME} -p${PASSWORD} ${DBNAME} -e "${update_sql}"
+mysql -h${HOSTNAME}  -P${PORT}  -u${USERNAME} -p${PASSWORD} ${DBNAME} -e "${select_sql}"
+```
+
+### 删除数据
+
+``` shell
+delete_sql="delete from ${TABLENAME}"
+mysql -h${HOSTNAME}  -P${PORT}  -u${USERNAME} -p${PASSWORD} ${DBNAME} -e "${delete_sql}"
+mysql -h${HOSTNAME}  -P${PORT}  -u${USERNAME} -p${PASSWORD} ${DBNAME} -e "${select_sql}"
+```
+
+### 查看运行线程
+
+对于一个Mysql连接，或者说一个线程，任何时刻都有一个状态，该状态表示了mysql当前正在做什么。
+
+show processlist 是显示用户正在运行的线程，需要注意的是，除了 root 用户能看到所有正在运行的线程外，其他用户都只能看到自己正在运行的线程，看不到其它用户正在运行的线程。除非单独个这个用户赋予了PROCESS 权限.
+
+``` shell
+user@owen-ubuntu:~$ mysql -uroot -proot -e 'show processlist'
+mysql: [Warning] Using a password on the command line interface can be insecure.
++----+-----------------+-----------+------+---------+-------+------------------------+------------------+
+| Id | User            | Host      | db   | Command | Time  | State                  | Info             |
++----+-----------------+-----------+------+---------+-------+------------------------+------------------+
+|  5 | event_scheduler | localhost | NULL | Daemon  | 75848 | Waiting on empty queue | NULL             |
+| 19 | root            | localhost | NULL | Query   |     0 | starting               | show processlist |
++----+-----------------+-----------+------+---------+-------+------------------------+------------------+
+
+user@owen-ubuntu:~$ mysqladmin -uroot -proot processlist
+mysqladmin: [Warning] Using a password on the command line interface can be insecure.
++----+-----------------+-----------+----+---------+-------+------------------------+------------------+
+| Id | User            | Host      | db | Command | Time  | State                  | Info             |
++----+-----------------+-----------+----+---------+-------+------------------------+------------------+
+| 5  | event_scheduler | localhost |    | Daemon  | 75855 | Waiting on empty queue |                  |
+| 20 | root            | localhost |    | Query   | 0     | starting               | show processlist |
++----+-----------------+-----------+----+---------+-------+------------------------+------------------+
+```
+
+通常只会显示100条如果想看跟多的可以使用full修饰（show full processlist）
+
+`mysql -uroot -e  -p password  'show processlist\G';`
+
+`mysql -uroot -e 'show processlist\G'|grep 'Info'|grep -v "NULL"|awk -F ":" '{print $2}'|sort|uniq -c|sort -rn;(查看正在执行的语句有哪些,并做好归并排序:)`
+
+## mysql命令行参数
 
 <https://blog.csdn.net/embedded_sky/article/details/41966037>
 
-mysql命令行参数
-
-``` text
+``` shell
 Usage: mysql [OPTIONS] [database]   //命令方式
  -?, --help          //显示帮助信息并退出
  -I, --help          //显示帮助信息并退出
