@@ -1,86 +1,136 @@
 # MySQL 运维
 
+[TOC]
+
 ## 备份与恢复
 
-１．通过mysqldump备份数据
-    备份指定库：mysqldump -uroot -proot --databases test_db > dump.sql
+参考：
 
-    备份所有库：mysqldump -uroot -proot --all-databases > dump.sql
+- https://www.cnblogs.com/Cherie/p/3309456.html
 
-２．数据恢复
-    ２．１）mysql -uroot -proot < dump.sql
+1. 通过mysqldump备份数据
+    备份指定库：`mysqldump -uroot -proot --databases test_db > dump.sql`
+
+    备份所有库：`mysqldump -uroot -proot --all-databases > dump.sql`
+
+2. mysqldump 命令备份导出mysql容器中数据
+
+    `mysql -h localhost -P 3306 --protocol=tcp -u root`
+
+    `mysqldump  -h localhost -P 3306 --protocol=tcp -u root -p database > ~/dbbackup.sql`
+
+    `docker exec -it mysql mysqldump -uroot -p123456 paas_portal > /cloud/sql/paas_portal.sql`
+
+3. 数据恢复
+   `mysql -uroot -proot < dump.sql`
+
+    或 在进入mysql后执行`mysql> source dump.sql`
+
+   指定db恢复
+
+    ``` shell
+    shell> mysqladmin create db1
+    shell> mysql db1 < dump.sql
+    ```
 
     或者：
-        在进入mysql后执行
-            mysql> source dump.sql
 
-    ２．２）指定db
-        shell> mysqladmin create db1
-        shell> mysql db1 < dump.sql
+    ``` shell
+    mysql> CREATE DATABASE IF NOT EXISTS db1;
+    mysql> USE db1;
+    mysql> source dump.sql
+    ```
 
-        或者：
-            mysql> CREATE DATABASE IF NOT EXISTS db1;
-            mysql> USE db1;
-            mysql> source dump.sql
+## 用户/权限操作
 
-mysql -h localhost -P 3306 --protocol=tcp -u root
+### １．添加新用户
 
-mysqldump  -h localhost -P 3306 --protocol=tcp -u root -p mc > ~/mc-dbbackup/mc.sql
+命令: `CREATE USER 'username'@'host' IDENTIFIED BY 'password';`
 
-mysqldump  -h localhost -P 3306 --protocol=tcp -u root -p mc-zipkin > ~/mc-dbbackup/mc-zipkin.sql
+- host - 指定该用户在哪个主机上可以登陆，此处的"localhost"，是指该用户只能在本地登录，不能在另外一台机器上远程登录，如果想远程登录的话，将"localhost"改为"%"，表示在任何一台电脑上都可以登录;也可以指定某台机器可以远程登录;
 
-https://blog.csdn.net/zhou_p/article/details/103177004
+- password - 该用户的登陆密码,密码可以为空,如果为空则该用户可以不需要密码登陆服务器。
 
-https://blog.csdn.net/harris135/article/details/79663901
+e.g.
 
-## 添加新用户，赋予不同权限
+限制本机用户访问：`CREATE USER 'user1'@'localhost' IDENTIFIED BY 'root';`
 
-１．添加新用户https://www.cnblogs.com/xujishou/p/6306765.html
-    １．１）进入mysql
+远程登录访问：`CREATE USER 'user2'@'%' IDENTIFIED BY 'root';`
 
-    １．２）添加用户
-        限制本机访问用户：mysql> CREATE USER 'user1'@'localhost' IDENTIFIED BY 'root';
+登录测试: `mysql -h localhost -uuser1 -p` or  `mysql -h 172.20.53.158 -uuser2 -p`
 
-        ip访问用户：mysql> CREATE USER 'user2'@'%' IDENTIFIED BY 'root';
+### ２．授权
 
-    １．３）登录测试
-        mysql -h localhost -uuser1 -p
+命令:
 
-        mysql -h 172.20.53.158 -uuser2 -p
+``` shell
 
-２．权限配置
-    ２．１）命令:GRANT ｛privileges｝ ON databasename.tablename TO 'username'@'host'
+GRANT ｛privileges｝ ON databasename.tablename TO 'username'@'host'`
 
-    ｛privileges｝：SELECT , INSERT , UPDATE
+privileges - 用户的操作权限,如SELECT , INSERT , UPDATE 等(详细列表见该文最后面).如果要授予所的权限则使用ALL.;databasename - 数据库名,tablename-表名,如果要授予该用户对所有数据库和表的相应操作权限则可用*表示, 如*.*.
+```
 
-    例子：GRANT SELECT, INSERT ON test_db.* TO 'user1'@'localhost';
+e.g. `GRANT SELECT, INSERT ON test_db.* TO 'user1'@'localhost';`
 
-    ２．２）创建用户同时授权
+### 3. 创建用户同时授权
 
-        mysql> GRANT SELECT ON *.* TO 'user1'@'localhost' identified by 'root';或者GRANT SELECT ON *.* TO 'user1'@'%' identified by 'root';
+GRANT SELECT ON *.* TO 'user1'@'localhost' identified by 'root';
+或者
+GRANT SELECT ON *.* TO 'user1'@'%' identified by 'root';
 
-        mysql> flush privileges;
+然后必须执行 `flush privileges;`, 否则登录时提示：ERROR 1045 (28000): Access denied for user 'user'@'localhost' (using password: YES )
 
-## 修改密码
+### 4.修改用户名
 
-１．）修改用户名
-    mysql> use mysql;  选择数据库
-    Database changed
-    mysql> update user set user="dns" where user="root";    将用户名为root的改为dns
+``` shell
+mysql> use mysql;  选择数据库
+Database changed
+mysql> update user set user="dns" where user="root";    将用户名为root的改为dns
+mysql> flush privileges;
+```
+
+### 5. 修改用户密码
+
+- 用UPDATE直接编辑user表
+
+    ```shell
+    mysql> use mysql; 
+    mysql> update user set password=password('123') where user='root' and host='localhost'; 
     mysql> flush privileges;
+    ```
 
-２．）修改密码
-    ２．１）用UPDATE直接编辑user表 
-        mysql> use mysql; 
-        mysql> update user set password=password('123') where user='root' and host='localhost'; 
-        mysql> flush privileges; 
+- 用mysqladmin
+    `sudo mysqladmin -uuser3 -p123 password root3`
 
-    ２．２）用mysqladmin 
-        前提该用户必须要有权限
+    注意：前提该用户必须要有权限
 
-        sudo mysqladmin -uuser3 -p123 password root3
+### 5. 删除用户
 
-        实时生效
+`DROP USER 'username'@'host';`
+
+### 6. 查看用户权限
+
+`show grants for username@localhost;`
+
+### 7. 撤销用户权限
+
+命令: `REVOKE privilege ON databasename.tablename FROM 'username'@'host';`
+
+说明: privilege, databasename, tablename - 同授权部分.
+
+e.g.: `REVOKE SELECT ON mq.* FROM 'user'@'localhost';`
+
+### 8. 查询用户/更新用户登录权限
+
+``` shell
+use mysql;
+select Host,User from user ;
+或 select * from user\G;
+
+update user set Host = '%' where User = 'root';
+
+flush privileges;
+```
 
 ## 数据找回
 
@@ -88,87 +138,5 @@ https://cloud.tencent.com/developer/article/1339799
 https://cloud.tencent.com/developer/article/1023260
 
 
-## 配置某个用户可以使用ip访问
-
-https://jasonshieh.iteye.com/blog/2412210
-
-１．连接到mysql
-
-２．查看用户信息
-    select Host,User from user where user='root';
-
-    或
-    select * from user\G;
-
-３．更新用户登录权限
-    update user set Host = '%' where User = 'root';
-
-    flush privileges;
-
-４．用ip连接
-    mysql -h 172.20.53.158 -uroot -p
-    Enter password: 
-    Welcome to the MySQL monitor.  Commands end with ; or \g.
-    Your MySQL connection id is 21
-    Server version: 8.0.16 MySQL Community Server - GPL
-
-    Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
-
-    Oracle is a registered trademark of Oracle Corporation and/or its
-    affiliates. Other names may be trademarks of their respective
-    owners.
-
-    Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
-
-备注：如果还是不行，去修改配置文件，bind-address = 127.0.0.1　（改为：0.0.0.0）
 
 
-检查权限是否修改：
-    select * from user\G;
-
-    *************************** 9. row ***************************
-                      Host: %
-                      User: user2
-                  Password: *81F5E21E35407D884A6CD4A731AEBFB6AF209E1B
-               Select_priv: Y
-               Insert_priv: N
-               Update_priv: N
-               Delete_priv: N
-               Create_priv: N
-                 Drop_priv: N
-               Reload_priv: N
-             Shutdown_priv: N
-              Process_priv: N
-                 File_priv: N
-                Grant_priv: N
-           References_priv: N
-                Index_priv: N
-                Alter_priv: N
-              Show_db_priv: N
-                Super_priv: N
-     Create_tmp_table_priv: N
-          Lock_tables_priv: N
-              Execute_priv: N
-           Repl_slave_priv: N
-          Repl_client_priv: N
-          Create_view_priv: N
-            Show_view_priv: N
-       Create_routine_priv: N
-        Alter_routine_priv: N
-          Create_user_priv: N
-                Event_priv: N
-              Trigger_priv: N
-    Create_tablespace_priv: N
-                  ssl_type: 
-                ssl_cipher: 
-               x509_issuer: 
-              x509_subject: 
-             max_questions: 0
-               max_updates: 0
-           max_connections: 0
-      max_user_connections: 0
-                    plugin: 
-     authentication_string: NULL
-
-case:
-    １）如果想修改用户通过ip访问，可以先添加用户，附上访问权限，再修改ip访问权限
