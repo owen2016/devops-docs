@@ -1,5 +1,7 @@
 # MySQL 操作
 
+[TOC]
+
 ## 加载执行SQL语句
 
 - 第一种方法: 命令行下(未连接数据库)
@@ -100,9 +102,7 @@ mysqladmin: [Warning] Using a password on the command line interface can be inse
 
 `mysql -uroot -e 'show processlist\G'|grep 'Info'|grep -v "NULL"|awk -F ":" '{print $2}'|sort|uniq -c|sort -rn;(查看正在执行的语句有哪些,并做好归并排序:)`
 
-## mysql命令行参数
-
-<https://blog.csdn.net/embedded_sky/article/details/41966037>
+## MySQL 命令行参数
 
 ``` shell
 Usage: mysql [OPTIONS] [database]   //命令方式
@@ -122,8 +122,7 @@ Usage: mysql [OPTIONS] [database]   //命令方式
  -e, --execute=name  //执行mysql的sql语句
  -E, --vertical      //垂直打印查询输出
  -f, --force         //如果有错误跳过去，继续执行下面的
- -G, --named-commands
- /*Enable named commands. Named commands mean this program's internal commands; see mysql> help . When enabled, the
+ -G, --named-commands //*Enable named commands. Named commands mean this program's internal commands; see mysql> help . When enabled, the
  named commands can be used from any line of the query, otherwise only from the first line, before an enter.
  Disable with --disable-named-commands. This option is disabled by default.*/
  -g, --no-named-commands
@@ -180,3 +179,30 @@ Usage: mysql [OPTIONS] [database]   //命令方式
  --server-arg=name   //Send embedded server this as a parameter.
  --show-warnings     //显示警告
 ```
+
+### 命令行示例
+
+#### 1. auto-rehash自动补全
+
+二种方法可以实现自动补全功能
+
+``` text
+－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+[mysql]
+#no-auto-rehash
+auto-rehash
+－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+mysql -u root --auto-rehash
+```
+
+#### 2. -E 垂直打印查询输出
+
+![](./_images/mysql-E.png)
+
+#### 3. -H 以html的方式输出
+
+![](_images/mysql-H.png)
+
+#### 3. -X 以xml的方式输出
+
+![](_images/mysql-X.png)

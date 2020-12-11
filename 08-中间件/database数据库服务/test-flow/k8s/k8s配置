@@ -1,9 +1,0 @@
-kubeadm join 172.20.53.208:6443 --token oiense.zunfelisnfdksief --discovery-token-ca-cert-hash sha256:933d05bb229413aedca70ef7421f4f591480183c3123329a4af1673104def677
-
-kubectl -n ${namespace} set image deployment/${project} ${project}=${harbor}/${category}/${project}:${imageTag}
-kubectl -n vwork set image deployment/vwork-common vwork-common=vwork.harbor.com/vwork-backend/vwork-common:local-201904280932
-
-kubectl -n ${namespace} rollout status deployment ${project}
-kubectl -n vwork rollout status deployment vwork-common
-
-

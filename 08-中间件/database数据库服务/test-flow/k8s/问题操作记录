@@ -1,1 +1,0 @@
-１．如果ingressgateway对应的启动机器挂了，那么重启后，最好重启一下ingressgateway的pod
