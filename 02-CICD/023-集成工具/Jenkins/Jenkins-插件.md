@@ -1,4 +1,12 @@
-# Jenkins 功能插件
+# Jenkins 插件
+
+## 角色配置插件
+
+Role Strategy Plugin
+
+## SSH相关插件
+
+SSH Slaves plugin
 
 ## 邮件反馈
 

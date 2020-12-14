@@ -1,14 +1,16 @@
-# Jenkins 基础
+# Jenkins
 
 [TOC]
 
 [Jenkins](https://jenkins.io/doc/) 是一个独立的开源自动化服务器，可以用来自动化与构建、测试、交付或部署软件相关的所有任务。
 
-安装过程参考[Installing Jenkins on Ubuntu](https://wiki.jenkins.io/display/JENKINS/Installing+Jenkins+on+Ubuntu)
+## Jenkins 安装
 
-## 安装步骤
+- https://jenkins.io/doc/　－＞　https://jenkins.io/doc/book/installing/
 
-### 1. JDK 安装
+### 环境准备 - JDK 安装
+
+**注意:** 如果将Jenkins作为Docker 容器运行，这不是必需的
 
 Jenkins依赖java环境， 请先确保java环境已安装好， java安装流程如下：
 
@@ -42,26 +44,57 @@ Jenkins依赖java环境， 请先确保java环境已安装好， java安装流�
     source /etc/profile
     ```
 
-### 2. jenkins 安装
+### 1. APT 安装
 
-- 安装步骤
+- https://pkg.jenkins.io/debian/
 
-    ``` shell
-    wget -q -O - https://pkg.jenkins.io/debian/jenkins-ci.org.key | sudo apt-key add -
-    sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
-    sudo apt-get update
-    sudo apt-get install jenkins
+**安装步骤**
 
-    # 修改jenkins配置`/etc/default/jenkins`
-    vim /etc/default/jenkins
+``` shell
+wget -q -O - https://pkg.jenkins.io/debian/jenkins-ci.org.key | sudo apt-key add -
+sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+sudo apt-get update
+sudo apt-get install jenkins
 
-    #配置jenkins运行用户以及用户组：
-    JENKINS_USER=root
-    JENKINS_GROUP=root
+#可选：设置指定版本
+sudo apt-get install jenkins=2.138.1
 
-    # 重启 jenkins
-    systemctl restart jenkins
-    ```
+# 修改jenkins配置`/etc/default/jenkins`
+vim /etc/default/jenkins
+
+#配置jenkins运行用户以及用户组：
+JENKINS_USER=root
+JENKINS_GROUP=root
+
+# 重启 jenkins
+systemctl restart jenkins
+```
+
+### 2. WAR包方式运行
+
+１．安装前准备 Java 8 (either a JRE or Java Development Kit (JDK) is fine)
+
+２．下载：http://mirrors.jenkins.io/war-stable/latest/jenkins.war
+
+３．执行命令  `java -jar jenkins.war --httpPort=8080`
+
+４．浏览器打开http://localhost:8080
+
+### 3.Docker 方式运行
+
+``` shell
+sudo docker run \
+-u root \
+--rm \
+-d \
+-p 8080:8080 \
+-p 50000:50000 \
+-v jenkins-data:/var/jenkins_home \
+-v /var/run/docker.sock:/var/run/docker.sock \
+jenkinsci/blueocean
+```
+
+初始化密码存储目录  `/var/jenkins_home/secrets/initialAdminPassword`
 
 ## Jenkins 目录结构
 

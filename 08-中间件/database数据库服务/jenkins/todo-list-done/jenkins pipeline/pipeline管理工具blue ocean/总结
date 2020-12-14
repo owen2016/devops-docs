@@ -1,8 +1,0 @@
-blue ocean是一个pipeline管理工具
-    可以创建管理pipeline(创建只能是multi branch类型的)
-    可以管理其他job
-    可以可视化执行流程和Log
-    可以可视化修改Jenkinsfile
-
-    总结：用处不大
-    
