@@ -24,7 +24,7 @@ https://dev.mysql.com/doc/mysql-apt-repo-quick-guide/en/#repo-qp-apt-install-fro
    下载配置deb包
    https://dev.mysql.com/get/mysql-apt-config_0.8.13-1_all.deb
 
-2. 执行命令配置
+2. 执行命令-选择MySQL服务器和其他组件的版本
 
    ``` shell
    sudo dpkg -i mysql-apt-config_0.8.13-1_all.deb

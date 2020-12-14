@@ -1,16 +1,17 @@
 # Mysql
 
-- https://dev.mysql.com/doc/
+- https://www.mysql.com/products/
 
-https://www.cnblogs.com/zxhyJack/p/8596864.html
+## MySQL Community Downloads
 
-https://www.cnblogs.com/UniqueColor/p/11150314.html
+- https://dev.mysql.com/downloads/mysql/
 
-https://www.cnblogs.com/felordcn/p/12970489.html
+## Mysql分支选择：Percona Or MariaDB
 
-https://www.kutu66.com//hulianwang/article_173387
+- https://www.cnblogs.com/keme/p/10239838.html
+- https://cloud.tencent.com/developer/article/1430028
 
-mysql_install_db - 初始化MySQL数据目录
+mysql集群服务开源服务[percona](https://www.percona.com/doc/percona-xtradb-cluster/LATEST/index.html)
 
-
-
+* percona监控服务采用[percona pmm](https://www.percona.com/doc/percona-monitoring-and-management/index.html#)服务
+* pmm基于client-server model, 包括pmm-client, pmm-server. [Percona Monitoring and Management Architecture](https://www.percona.com/doc/percona-monitoring-and-management/architecture.html)
