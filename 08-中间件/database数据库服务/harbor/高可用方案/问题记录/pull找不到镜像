@@ -1,4 +1,0 @@
-Error response from daemon: manifest for mc.harbor.com/test/maven-test:latest not found
-
-push可以成功
-清空redis,重新pull即可

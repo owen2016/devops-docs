@@ -22,9 +22,11 @@ jenkins默认的权限管理体系不支持用户组或角色的配置，这里�
 
 ![Jenkins-权限管理-2](./_images/Jenkins-权限管理-2.png)
 
-    ManageRoles
-    - Global roles是对全局的角色控制，
-    - Project roles只针对项目进行控制,所以需要为每个项目单独添加指定的role。
+ManageRoles
+    - Global roles是对全局的角色控制
+    - Project roles只针对项目进行控制,所以需要为每个项目单独添加指定的role (区别于全局，只能有项目相关权限，没有jenkins管理权限配置)
+      配置job pattern需要注意：prod.*代表匹配以prod开头的内容
+                例如：如果以dev开头就写成　dev.* 一定要加上"."; .*test表示以test结尾的内容项目
 
 ![Jenkins-权限管理-3](./_images/Jenkins-权限管理-3.png)
 

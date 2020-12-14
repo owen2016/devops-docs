@@ -1,7 +1,0 @@
-https://www.cnblogs.com/zongfa/p/7808807.html
-
-环境
-Ubuntu 16.04
-
-安装Redis服务器端
-    ~ sudo apt-get install redis-server

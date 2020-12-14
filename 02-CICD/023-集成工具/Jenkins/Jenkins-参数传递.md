@@ -1,3 +1,86 @@
+# Jenkins 参数传递
+
+配置参数：
+    General－＞This project is parameterized
+
+使用：
+    1. Jenkinsfile执行中使用（https://blog.johnwu.cc/article/jenkins-pipeline-job-boolean-parameter.html）
+        jenkinsfile中
+            echo "BRANCH=${BRANCH}"
+
+        注意：必须双引号
+
+    2. jenkins配置页面中参数替换（https://blog.csdn.net/Ywylalala/article/details/83929856）
+        结论：
+            按照正常方式配置和使用参数
+
+            去掉勾选：最下面的Pipeline里的 Lightweight checkout，因为勾选了之后它不会解析参数化构建的参数
+
+
+
+
+１．我们进入我们目标Jenkins任务，选择【参数化构建过程】-》【添加参数】-》【Git Parameter Plug-In】
+    ＊原来添加branch的地方，去掉branch参数＊
+
+    １．１）添加Git Parameter
+        Name: Tag
+        Parameter Type: Tag
+        Default Value：　origin/master
+
+    １．２）删除branch配置参数
+
+    １．３）修改Source Code Management
+        Branches to build修改为
+            ${Tag}或$Tag
+
+    １．４）检查代码是否是正确的tag部分
+        进入代码存放地方，用git命令查看
+            
+            jenkins代码存储的工作空间路径(https://blog.csdn.net/ZZY1078689276/article/details/77485615)
+            【系统管理】－＞【系统设置】－＞默认： /var/lib/jenkins
+
+              /var/lib/jenkins/workspace
+
+２．修改dev-build-vwork-backend-common-dependencies
+  执行脚本gen-stub为：
+
+－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+```shell
+#! /bin/bash
+set -e
+
+WORKSPACE=${WORKSPACE:-$(pwd)}
+
+GIT_DOMAIN=${GIT_DOMAIN:-"ssh://git@gitlab.vivo.com:2289"}
+GIT_GROUP=${GIT_GROUP:-"vwork"}
+
+Tag=${Tag:-'origin/master'}
+
+git checkout ${Tag}
+
+MODULES="vwork-customer vwork-account vwork-warehouse vwork-product vwork-common vwork-sales vwork-job vwork-thirdparty vwork-hrms"
+
+for module in $MODULES; do
+  cd ${WORKSPACE}
+  if [ ! -e ${WORKSPACE}/$module ]; then
+    git clone $GIT_DOMAIN/$GIT_GROUP/$module.git
+    cd ${WORKSPACE}/$module
+    git checkout ${Tag}
+  else
+    cd ${WORKSPACE}/$module
+    git checkout ${Tag}
+  fi
+done```
+－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+３．对于默认tag => origin/master
+  正常
+
+４．配置jenkins（添加job 之间实现带参数触发：https://blog.csdn.net/workdsz/article/details/77935374）
+  Build　－＞　Trigger/call builds on other projects
+
+  add "Predefined parameters"
+    Tag=${Tag}
+
 vwork-frontend:
     1)删除Branch参数，添加Git parameter参数
         Name: Tag

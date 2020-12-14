@@ -1,7 +1,0 @@
-1. 加载新配置
-    sudo systemctl reload nginx.service
-
-2. 检查配置是否正确
-    nginx -t -c /etc/nginx/nginx.conf
-
-    问题一: error_log不能指定log_format
