@@ -1,78 +1,13 @@
 # Harbor 使用
 
-## 修改数据存储目录
+``` shell
+#镜像打标签的命令
+# docker tag 镜像名:标签 私服地址/仓库项目名/镜像名:标签
+ 
+#推送到私服的命令
+#docker push 私服地址/仓库项目名/镜像名:标签
+ 
+#从私服拉取镜像的命令
+#docker pull 私服地址/仓库项目名/镜像名:标签
+```
 
-根据实际修改harbor数据存储目录，文件路径为`${Harbor_Home}/docker-compose.yml`, 修改容器挂载目录
-
-------------
-
-## 上传 docker镜像
-
-1. 使用`pushImagesToHarbor.py`,拷贝到装有docker的机器上。
-
-2. 修改这台机器的hosts，添加
-
-    ```shell
-    # <Harbor IP address>是Harbor的IP地址
-    # <Harbor Domain>是pushImagesToHarbor.py里的HARBOR_DOMAIN
-    <Harbor IP address>   <Harbor Domain>
-    ```
-
-3. 修改这台机器的/etc/docker/daemon.json
-
-    ```json
-    {
-      "registry-mirrors": [
-        "https://registry.docker-cn.com"
-      ],
-      "insecure-registries": [
-        "<Harbor Domain>"
-      ]
-    }
-    ```
-
-4. 检查这台机器是否能登陆Harbor
-
-    ```shell
-    docker login <HARBOR_DOMAIN>
-    ```
-
-5. 执行`pushImagesToHarbor.py`
-
-    ```shell
-    python pushImagesToHarbor.py
-    ```
-
-------------
-
-## Harbor 磁盘清理
-
-1. 登录到harbor admin管理界面,清除多余镜像tag
-
-2. 登录到harbor服务宿主机器执行命令：
-
-    ```text
-    # 垃圾回收
-    docker exec -it registry registry garbage-collect  /etc/registry/config.yml
-    ```
-
-## 访问Harbor数据库
-
-https://blog.csdn.net/qq_41980563/article/details/90633742
-
-１．进入容器
-
-２．连接数据库
-        # psql -U postgres -h postgresql -p 5432
-
-３．选择数据库
-        # \c registry
-
-4. 查看数据
-        # select * from harbor_user;
-
-        # select * from role;
-
-５．其他
-        退出：　\q
-        列出所有数据库：　\l
