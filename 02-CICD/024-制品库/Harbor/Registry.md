@@ -20,7 +20,7 @@ registry
 
 访问http://127.0.0.01:5000/v2/_catalog
 
-```
+``` shell
 docker run -d \
   --restart=always \
   --name registry \
@@ -37,7 +37,8 @@ docker run -d \
 
 ```
 ### cat config.yml
-```
+
+``` shell
 version: 0.1
 log:
  fields:
@@ -71,15 +72,16 @@ $ docker tag ubuntu localhost:5000/ubuntu
 $ docker push localhost:5000/ubuntu
 
 查看镜像名
+
 ` curl -s -XGET localhost:5000/v2/_catalog | python -mjson.tool`
 
 查看镜像reversion
-```
-# ls /var/lib/registry/docker/registry/v2/repositories/jenkins/_manifests/revisions/sha256
-0de43cde2c4b864a8e4a84bbd9958e47c5d851319f118203303d040b0a74f159
-```
+`ls /var/lib/registry/docker/registry/v2/repositories/jenkins/_manifests/revisions/sha256
+0de43cde2c4b864a8e4a84bbd9958e47c5d851319f118203303d040b0a74f159`
+
 垃圾回收
-```
+
+``` shell
 # docker exec -it 507320e9dbd3 \
 registry garbage-collect /etc/docker/registry/config.yml
 ```

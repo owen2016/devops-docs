@@ -2,6 +2,7 @@
 
 Harbor通过“project” docker镜像.用户可以被赋予不同的角色，并被添加到“project”里
 
+- https://blog.csdn.net/liumiaocn/article/details/81813666
 ## 用户
 
 Harbor 提供不同的认证方式
