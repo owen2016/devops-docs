@@ -1,0 +1,16 @@
+
+root@ecs-ubuntu18:/home/user/acme.sh# ./acme.sh --issue -d *.devopsing.site  --dns --yes-I-know-dns-manual-mode-enough-go-ahead-please
+[Wed Dec 16 16:04:43 CST 2020] Using CA: https://acme-v02.api.letsencrypt.org/directory
+[Wed Dec 16 16:04:43 CST 2020] Creating domain key
+[Wed Dec 16 16:04:43 CST 2020] The domain key is here: /root/.acme.sh/*.devopsing.site/*.devopsing.site.key
+[Wed Dec 16 16:04:43 CST 2020] Single domain='*.devopsing.site'
+[Wed Dec 16 16:04:43 CST 2020] Getting domain auth token for each domain
+[Wed Dec 16 16:04:49 CST 2020] Getting webroot for domain='*.devopsing.site'
+[Wed Dec 16 16:04:49 CST 2020] Add the following TXT record:
+[Wed Dec 16 16:04:49 CST 2020] Domain: '_acme-challenge.devopsing.site'
+[Wed Dec 16 16:04:49 CST 2020] TXT value: '-jEWdpI5yOETrfGf3EVh01_a3ywrW426wmppjuDqXOs'
+[Wed Dec 16 16:04:49 CST 2020] Please be aware that you prepend _acme-challenge. before your domain
+[Wed Dec 16 16:04:49 CST 2020] so the resulting subdomain will be: _acme-challenge.devopsing.site
+[Wed Dec 16 16:04:49 CST 2020] Please add the TXT records to the domains, and re-run with --renew.
+[Wed Dec 16 16:04:49 CST 2020] Please add '--debug' or '--log' to check more details.
+[Wed Dec 16 16:04:49 CST 2020] See: https://github.com/acmesh-official/acme.sh/wiki/How-to-debug-acme.sh
