@@ -290,3 +290,13 @@ acme 协议和 letsencrypt CA 都在频繁的更新, 因此 acme.sh 也经常更
 开启自动更新：`acme.sh --upgrade --auto-upgrade`
 
 取消自动更新： `acme.sh --upgrade --auto-upgrade 0`
+
+## 删除acme.sh
+
+``` shell
+user@owen-ubuntu:~$ acme.sh --uninstall
+[2020年 12月 18日 星期五 15:55:11 CST] Removing cron job
+[2020年 12月 18日 星期五 15:55:11 CST] LE_WORKING_DIR='/home/user/.acme.sh'
+[2020年 12月 18日 星期五 15:55:11 CST] Uninstalling alias from: '/home/user/.bashrc'
+[2020年 12月 18日 星期五 15:55:11 CST] The keys and certs are in "/home/user/.acme.sh", you can remove them by yourself.
+```
