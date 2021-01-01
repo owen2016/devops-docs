@@ -1,0 +1,36 @@
+before_script:
+  - export PATH=$PATH:/usr/local/bin
+
+Build:
+  stage: build
+  artifacts:
+    paths:
+    - _book
+  script:
+    #- npm install gitbook-cli -g # 安装gitbook-clean环境需要
+    #- npm install -g nodeppt --registry https://registry.npm.taobao.org
+    - p=`pwd`
+    - echo "[build stage:] Working directory is $p"    
+    - gitbook install
+    - gitbook build --log=debug
+    # integrate with nodeppt
+    #- ./Share/nodeppt/build_ppt.sh
+    #- cp -r Share/nodeppt/* _book/Share/nodeppt
+
+deploy:
+  stage: deploy
+  script:
+    - p=`pwd`
+    - echo "[deploy stage:] Working directory is $p"
+    # make backup
+    - if [ -d "/gitbook/wiki-bak" ]; then rm -r /gitbook/wiki-bak; fi;
+    - if [ ! -d "/gitbook/wiki" ]; then mkdir /gitbook/wiki; else mv /gitbook/wiki /gitbook/wiki-bak; fi;
+
+    # deploy latest files
+    - cd _book;
+    - p=`pwd`
+    - echo "[deploy stage:] Working directory is $p"
+    - cp -rf . /gitbook/wiki/; # copy all files under _book to ./gitbook/wiki
+    - echo " Publish Success ! "
+  only:
+    - master # this job will affect only the 'master' branch
