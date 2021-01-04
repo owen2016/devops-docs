@@ -1,4 +1,4 @@
-# EFK (Elasticsearch+Fluentd+kibana) ---> 收集logfile (e.g. nginx)
+# EFK 收集Nginx日志文件
 
 ## 安装Elasticsearch
 
@@ -90,6 +90,9 @@ td-agent-gem list //查看安装的插件
     path /var/log/nginx/access.log
     pos_file /var/log/td-agent/access.log.pos
     tag nginx.access
+    
+    <!-- format /^(?<host>[^ ]*) [^ ]* (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>\S+)(?: +(?<path>[^ ]*) +\S*)?" (?<code>[^ ]*) (?<size>[^ ]*)(?: "(?<referer>[^\"]*)" "(?<agent>[^\"]*)")?$/
+  time_format %d/%b/%Y:%H:%M:%S %z -->
     <parse>
         @type nginx
     </parse>
@@ -121,6 +124,10 @@ td-agent-gem list //查看安装的插件
    `sudo systemctl restart td-agent.service`
 
 3. 访问nginx网站用于获取access的log
+
+    修改nginx 日志格式
+
+    `log_format  main  '$remote_addr $http_host [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent"';`
 
 4. 访问kibana的网站 - http://localhost:5601
 
