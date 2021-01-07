@@ -22,6 +22,29 @@ Beats是用于单用途数据托运人的平台。它们以轻量级代理的形
 
 - <https://www.elastic.co/guide/en/beats/filebeat/current/setting-up-and-running.html>
 
+``` shell
+#1. 下载deb包
+curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.0.0-amd64.deb
+
+#2. 到包所在目录安装
+sudo dpkg -i filebeat-7.0.0-amd64.deb
+
+#3. 复制配置文件
+mv /etc/filebeat/filebeat.yml /etc/filebeat/filebeat-bk.yml
+
+#4. 添加配置文件
+vim /etc/filebeat/filebeat.yml
+
+#5. 启动Filebeat
+service filebeat start
+
+#6. 检查Filebeat启动状态/设置开机自启
+service filebeat status
+
+systemctl enable filebeat
+
+```
+
 ## 配置
 
 - <https://www.elastic.co/guide/en/beats/filebeat/current/howto-guides.html>
