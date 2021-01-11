@@ -1,5 +1,7 @@
 # LDAP
 
+LDAP是轻量目录访问协议(Lightweight Directory Access Protocol)的缩写；LDAP标准实际上是在X.500标准基础上产生的一个简化版本。LDAP是一种开放Internet标准，LDAP协议是跨平台的 的Interent协议， 它是基于X.500标准的， 与X.500不同，LDAP支持TCP/IP(即可以分布式部署)
+
 ## 目录服务
 
 目录服务就是按照树状存储信息的模式
@@ -198,8 +200,8 @@ OpenLDAP是轻型目录访问协议（Lightweight Directory Access Protocol，LD
 
 - https://www.cnblogs.com/sitoi/p/11819550.html
 
-ldapsearch 
-
+使用“ldapsearch” 命令可以验证、查询 ldapserver是否连接访问
+`ldapsearch -h 172.26.20.151 -p 389 -x -D "cn=admin,dc=xxxx,dc=com,dc=cn" -w 'Tse*63!s_ecO9idw' -b "AugUserId=xxx,cn=employee,dc=xxx,dc=com,dc=cn"`
 
 ## UI管理工具
 针对OpenLDAP图形界面管理，开源组织也提供了GUI管理OpenLDAP软件，目前开源的产品有phpLDAPadmin、LDAP Account Manager、Apache Directory Studio、LDAP Admin等管理工具
