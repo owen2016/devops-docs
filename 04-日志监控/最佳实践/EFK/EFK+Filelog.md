@@ -66,7 +66,7 @@ systemctl start td-agent.service
 
   并且在log中看到对应输出即可：` tail -f /var/log/td-agent/td-agent.log `
 
-  ![td-agent-1](./_images/td-agent-1.png)
+  ![td-agent-1](./images/td-agent-1.png)
 
 ### 安装插件
 
@@ -90,9 +90,6 @@ td-agent-gem list //查看安装的插件
     path /var/log/nginx/access.log
     pos_file /var/log/td-agent/access.log.pos
     tag nginx.access
-    
-    <!-- format /^(?<host>[^ ]*) [^ ]* (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>\S+)(?: +(?<path>[^ ]*) +\S*)?" (?<code>[^ ]*) (?<size>[^ ]*)(?: "(?<referer>[^\"]*)" "(?<agent>[^\"]*)")?$/
-  time_format %d/%b/%Y:%H:%M:%S %z -->
     <parse>
         @type nginx
     </parse>
@@ -133,4 +130,4 @@ td-agent-gem list //查看安装的插件
 
   进到Management tab，创建index，能看到类似nginx.access-2019.4.11 or nginx.error-2019.4.11 的index即表示fluentd的log已经push到了kibana
 
-  ![efk-1](./_images/efk-1.png)
+  ![efk-1](./images/efk-1.png)
