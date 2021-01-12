@@ -2,7 +2,7 @@
 
 ## 故障现象
 
-![kibana](./_images/kibana.png)
+![kibana](https://cdn.devopsing.site/2020/20210112231802.png)
 
 在部署ELK的单机环境，当连接Kibana时候提示下面错误，即使重启整个服务也是提示`Kibana server is not ready`.
 
@@ -14,17 +14,30 @@
 
 前段时间ELK服务还是正常的，进入容器去ping ip 也都没问题，服务也都是`Up` 状态； ElasticSearch 服务也可以通过`http://localhost:9200/` 访问到，但是就是kibana 不能连接ElasticSearch
 
-![ELK](./_images/es-shards-1.png)
+![ELK](https://cdn.devopsing.site/2020/20210112231919.png)
 
 再查看 kibana 日志发现如下信息, 其中包含了`no_shard_available_action_exception`, 看起来是`分片` 的问题。
 
 ```json
-{"type":"error","@timestamp":"2020-09-15T00:41:09Z","tags":["warning","stats-collection"],"pid":1,"level":"error","error":{"message":"[no_shard_available_action_exception] No shard available for [get [.kibana][doc][config:6.8.11]: routing [null]]","name":"Error","stack":"[no_shard_available_action_exception] No shard available for [get [.kibana][doc][config:6.8.11]: routing [null]] :: {\"path\":\"/.kibana/doc/config%3A6.8.11\",\"query\":{},\"statusCode\":503,\"response\":\"{\\\"error\\\":{\\\"root_cause\\\":[{\\\"type\\\":\\\"no_shard_available_action_exception\\\",\\\"reason\\\":\\\"No shard available for [get [.kibana][doc][config:6.8.11]: routing [null]]\\\"}],routing [null]]"}
+{
+    "type": "error",
+    "@timestamp": "2020-09-15T00:41:09Z",
+    "tags": [
+        "warning",
+        "stats-collection"
+    ],
+    "pid": 1,
+    "level": "error",
+    "error": {
+        "message": "[no_shard_available_action_exception] No shard available for [get [.kibana][doc][config:6.8.11]: routing [null]]",
+        "name": "Error",
+        "stack": "[no_shard_available_action_exception] No shard available for [get [.kibana][doc][config:6.8.11]: routing [null]] :: {\"path\":\"/.kibana/doc/config%3A6.8.11\",\"query\":{},\"statusCode\":503,\"response\":\"{\\\"error\\\":{\\\"root_cause\\\":[{\\\"type\\\":\\\"no_shard_available_action_exception\\\",\\\"reason\\\":\\\"No shard available for [get [.kibana][doc][config:6.8.11]: routing [null]]\\\"}],routing [null]]"
+    }
 ```
 
 通过 [ES可视化工具-cerebro](https://blog.csdn.net/liumiaocn/article/details/98517815) 查看  
 
-![cerebro](./_images/es-shards-2.png)
+![cerebro](https://cdn.devopsing.site/2020/20210112231922.png)
 
 实际当时情况是"红色"的，而不是目前看到的 "黄色"， `heap/disk/cup/load` 基本都是红色的, 可能因为当时手动删除了几个index原因  
 
@@ -60,7 +73,7 @@
 
 `curl -XGET http://localhost:9200/_cat/shards`
 
-![UNASSIGNED](./_images/es-shards-3.png)
+![UNASSIGNED](https://cdn.devopsing.site/2020/20210112231926.png)
 
 故障原因大概确定了，应该就是`unassigned_shards`导致的 下面就看如何解决
 
@@ -81,7 +94,7 @@
     }'
     ```
 
-    ![Fix-UNASSIGNED](./_images/es-shards-4.png)
+    ![Fix-UNASSIGNED](https://cdn.devopsing.site/2020/20210112231930.png)
 
 ## 知识点
 
