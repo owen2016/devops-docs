@@ -4,6 +4,10 @@
 
 [Jenkins](https://jenkins.io/doc/) 是一个独立的开源自动化服务器，可以用来自动化与构建、测试、交付或部署软件相关的所有任务。
 
+Jenkins的前身是Hudson, Hudson是SUN公司时期就有的CI工具，后来因为ORACLE收购SUN之后的商标之争，创始人KK搞了新的分支叫Jenkins 。今天的Hudson还在由ORACLE持续维护，但风头已经远不如社区以及CloudBees驱动的Jenkins.
+
+关于Hudson 和Jenkins的恩怨，有兴趣可查阅 https://www.oschina.net/news/63453/hudson-and-jenkins-grievances
+
 ## Jenkins 安装
 
 - https://jenkins.io/doc/　－＞　https://jenkins.io/doc/book/installing/
@@ -26,7 +30,6 @@ Jenkins依赖java环境， 请先确保java环境已安装好， java安装流�
     sudo wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u191-b12/2787e4a523244c269598db4e85c51e0c/jdk-8u191-linux-x64.tar.gz
 
     tar -zxvf ${your_download_path}/jdk-8u191-linux-x64.tar.gz
-
     mv ${your_download_path}/jdk1.8.0_191 /usr/local/
 
     ```
@@ -38,11 +41,7 @@ Jenkins依赖java环境， 请先确保java环境已安装好， java安装流�
     export PATH=$PATH:$JAVA_HOME/bin
     ```
 
-- 使环境变量生效:
-
-    ```bash
-    source /etc/profile
-    ```
+- 使环境变量生效: `source /etc/profile`
 
 ### 1. APT 安装
 
@@ -95,33 +94,3 @@ jenkinsci/blueocean
 ```
 
 初始化密码存储目录  `/var/jenkins_home/secrets/initialAdminPassword`
-
-## Jenkins 目录结构
-
-- Executable-war： `/usr/lib/jenkins/jenkins.war`
-
-- JENKINS_HOME: `/var/lib/jenkins`
-
-即为Jenkins的安装目录,可以在Jenkins页面中得到，Jenkins->系统管理-> 系统设置
-
-``` text
- +- config.xml     (jenkins root configuration)
- +- *.xml          (other site-wide configuration files)
- +- userContent    (files in this directory will be served under your http://server/userContent/) 
- +- fingerprints   (stores fingerprint records)
- +- plugins        (stores plugins)
- +- jobs
-     +- [JOBNAME]      (sub directory for each job)
-         +- config.xml     (job configuration file)
-         +- workspace      (working directory for the version control system)
-         +- latest         (symbolic link to the last successful build)
-         +- builds
-             +- [BUILD_ID]     (for each build)
-                 +- build.xml      (build result summary)
-                 +- log            (log file)
-                 +- changelog.xml  (change log)
-```
-
-如果有权限管理，则在HOME目录下还会有users目录。
-
-其中config.xml是Jenkins重要的配置文件。我们都知道Jenkins用于monitor多个build，而jobs这个目录就是存储每个build相关信息的地方。

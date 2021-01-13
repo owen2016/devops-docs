@@ -1,4 +1,4 @@
-# 使用私有gitlab搭建gitbook持续集成
+# 通过 GitLab-CI 实现 gitbook静态站点部署
 
 [TOC]
 
@@ -12,7 +12,7 @@ gitbook和gitlab搭建持续集成，可实现文档的即时更新，这也是�
 
 ![](https://gitee.com/owen2016/pic-hub/raw/master/pics/20201016234543.png)
 
-## 环境搭建
+## gitbook 环境搭建
 
 ### 1. 安装 Node.js
 
@@ -32,61 +32,7 @@ gitbook 是一个基于 Node.js 的命令行工具，下载安装 [Node.js](http
 
 更多详情请参照 [gitbook 安装文档](https://github.com/GitbookIO/gitbook/blob/master/docs/setup.md) 来安装 gitbook
 
-### 3. 安装 Gitlab Runner
-
-下载二进制包
-
-`sudo curl -L --output /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64`
-
-添加执行权限
-
-`sudo chmod +x /usr/local/bin/gitlab-runner`
-
-(可选)如果使用Docker，安装Docker
-
-`curl -sSL https://get.docker.com/ | sh`
-
-创建 GitLab CI 用户
-
-`sudo useradd --comment 'GitLab Runner' --create-home gitlab-runner --shell /bin/bash`
-
-以Service方式安装
-
-```bash
-sudo gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner
-sudo gitlab-runner start
-```
-
-### 4. 注册Runner
-
-- [Runner安装](https://docs.gitlab.com/runner/install/linux-manually.html)    
-- [Runner注册](https://docs.gitlab.com/runner/register/index.html)
-
-运行以下命令
-
-`sudo gitlab-runner register`
-
-输入GitLab 实例 URL `Please enter the gitlab-ci coordinator URL`
-
-输入Gitlab注册的token (Gitlab admin权限才能看见)
-
-`Please enter the gitlab-ci token for this runner
-    xxx`
-
-输入Runner描述，后面可在Gitlab UI上更新
-
-`Please enter the gitlab-ci description for this runner`
-
-输入Runner Tag，后面可在Gitlab UI上更新
-
-`Please enter the gitlab-ci tags for this runner (comma separated):`
-
-选择Runner executor
-
- `Please enter the executor: ssh, docker+machine, docker-ssh+machine, kubernetes, docker, parallels, virtualbox, docker-ssh, shell:
-    shell`
-
-## gitbook 配置
+## gitbook 使用介绍
 
 ### 1. 目录结构
 
@@ -227,7 +173,63 @@ gitbook 提供了丰富插件，默认带有 5 个插件，highlight、search、
 
 - <https://gitbook.zhangjikai.com/plugins.html>
 
-## gitlab 与gitbook集成 
+## 搭建GitLab-CI 环境
+
+### 1. 安装 GitLab Runner
+
+下载二进制包
+
+`sudo curl -L --output /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64`
+
+添加执行权限
+
+`sudo chmod +x /usr/local/bin/gitlab-runner`
+
+(可选)如果使用Docker，安装Docker
+
+`curl -sSL https://get.docker.com/ | sh`
+
+创建 GitLab CI 用户
+
+`sudo useradd --comment 'GitLab Runner' --create-home gitlab-runner --shell /bin/bash`
+
+以Service方式安装
+
+```bash
+sudo gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner
+sudo gitlab-runner start
+```
+
+### 2. 注册 GitLab Runner
+
+- [Runner安装](https://docs.gitlab.com/runner/install/linux-manually.html)
+- [Runner注册](https://docs.gitlab.com/runner/register/index.html)
+
+运行以下命令
+
+`sudo gitlab-runner register`
+
+输入GitLab 实例 URL `Please enter the gitlab-ci coordinator URL`
+
+输入Gitlab注册的token (Gitlab admin权限才能看见)
+
+`Please enter the gitlab-ci token for this runner
+    xxx`
+
+输入Runner描述，后面可在Gitlab UI上更新
+
+`Please enter the gitlab-ci description for this runner`
+
+输入Runner Tag，后面可在Gitlab UI上更新
+
+`Please enter the gitlab-ci tags for this runner (comma separated):`
+
+选择Runner executor
+
+ `Please enter the executor: ssh, docker+machine, docker-ssh+machine, kubernetes, docker, parallels, virtualbox, docker-ssh, shell:
+    shell`
+
+## 编写gitlab-ci.yaml 实现GitLab 与gitbook 集成
 
 **.gitlab-ci.yml 示例：**
 
