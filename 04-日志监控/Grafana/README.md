@@ -11,11 +11,7 @@ grafana有热插拔控制面板和可扩展的数据源，目前已经支持绝�
 ## Docker部署Grafana
 
 ``` shell
-docker run -d \
-        -p 3000:3000 \
-        --name grafana \
-        -v /opt/mount/grafana/dir/grafana:/usr/share/grafana \
-        -v /opt/mount/grafana/data/grafana:/var/lib/grafana \
-        grafana/grafana
+docker run -d -p 3000:3000 --name=grafana grafana/grafana
 
+docker run -d -p 3000:3000 --name=grafana -v /data/grafana:/var/lib/grafana grafana/grafana
 ```
