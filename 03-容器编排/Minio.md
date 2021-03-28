@@ -19,6 +19,7 @@
 ## Minio
 
 ![](https://cdn.nlark.com/yuque/0/2021/jpeg/5374140/1616841442916-a0aebceb-8506-441f-bc1b-2aa4b6e81318.jpeg#align=left&display=inline&height=128&margin=%5Bobject%20Object%5D&originHeight=400&originWidth=1200&size=0&status=done&style=none&width=385)
+
 Minio是GlusterFS创始人之一Anand Babu Periasamy发布新的开源项目。Minio兼容Amason的S3分布式对象存储项目，采用Golang实现，客户端支持Java,Python,Javacript, Golang语言。
 
 Minio是建立在云原生的基础上；有分布式和共享存储等功能；旨在多租户环境中以可持续的方式进行扩展的对象存储服务。它最适合存储非结构化数据，如：照片、视频、日志文件、容器/虚拟机/映像等，单次存储对象的大小最大可达5TB
@@ -59,8 +60,8 @@ Minio是建立在云原生的基础上；有分布式和共享存储等功能；
 如下图，**每一行是一个机器节点**，这里有32个集群，**每个节点里有一个小方块，我们称之为Drive，Drive可简单地理解为磁盘**。一个节点有32个Drive，相当于32个磁盘。
 
 **Set是一组Drive的集合**，所有红色标识的Drive组成了一个Set。
-
 ![image.png](https://cdn.nlark.com/yuque/0/2021/png/5374140/1616688028544-2d4661ff-7d44-427e-a7b2-4e98922fbaec.png#align=left&display=inline&height=298&margin=%5Bobject%20Object%5D&name=image.png&originHeight=298&originWidth=299&size=58821&status=done&style=none&width=299)
+
 一个对象存储在一个Set上; 一个集群划分为多个Set
 一个Set包含的Drive数量是固定的, 默认由系统根据集群规模自动计算得出 MINIO_ERASURE_SET_DRIVE_COUNT
 一个SET中的Drive尽可能分布在不同的节点上
@@ -142,23 +143,25 @@ MinIO Client (mc)为ls，cat，cp，mirror，diff，find等UNIX命令提供了�
 
 ##### 命令使用
 
-`ls       ``列出文件和文件夹。``
-mb       ``创建一个存储桶或一个文件夹。``
-cat      ``显示文件和对象内容。``
-pipe     ``将一个``STDIN``重定向到一个对象或者文件或者``STDOUT``。``
-share    ``生成用于共享的``URL``。``
-cp       ``拷贝文件和对象。``
-mirror   ``给存储桶和文件夹做镜像。``
-find     ``基于参数查找文件。``
-diff     ``对两个文件夹或者存储桶比较差异。``
-rm       ``删除文件和对象。``
-events   ``管理对象通知。``
-watch    ``监听文件和对象的事件。``
-policy   ``管理访问策略。``
-session  ``为``cp``命令管理保存的会话。``
-config   ``管理``mc``配置文件。``
-update   ``检查软件更新。``
-version  ``输出版本信息。`
+```
+ls       列出文件和文件夹。
+mb       创建一个存储桶或一个文件夹。
+cat      显示文件和对象内容。
+pipe     将一个STDIN重定向到一个对象或者文件或者STDOUT。
+share    生成用于共享的URL。
+cp       拷贝文件和对象。
+mirror   给存储桶和文件夹做镜像。
+find     基于参数查找文件。
+diff     对两个文件夹或者存储桶比较差异。
+rm       删除文件和对象。
+events   管理对象通知。
+watch    监听文件和对象的事件。
+policy   管理访问策略。
+session  为cp命令管理保存的会话。
+config   管理mc配置文件。
+update   检查软件更新。
+version  输出版本信息。
+```
 
 **列出Mino服务端**
 
