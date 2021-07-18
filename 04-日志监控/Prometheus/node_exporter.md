@@ -2,7 +2,7 @@
 
 Exporter for machine metrics  [prometheus/node_exporter](https://github.com/prometheus/node_exporter)
 
-![node_exporter-7.jpg](./_images/node_exporter-7.jpg)
+![node_exporter-7.jpg](https://cdn.devopsing.site/2021/20210415230045.jpg)
 
 ## 安装 Prometheus
 
@@ -43,11 +43,11 @@ curl 127.0.0.1:9100/metric   #会返回很多数据指标
 
 修改prometheus.yml配置文件, 因为这里node_exporter和Prometheus安装在同一台机器,使用localhost即可，node_exporter端口9100
 
-![node_exporter-2.png](./_images/node_exporter-2.png)
+![node_exporter-2.png](https://cdn.devopsing.site/2021/20210415221829.png)
 
 重启prometheus，点击导航栏中的status->targets可以看到
 
-![node_exporter-3.png](./_images/node_exporter-3.png)
+![node_exporter-3.png](https://cdn.devopsing.site/2021/20210415230052.png)
 
 ## 安装 grafana
 
@@ -68,11 +68,10 @@ sudo dpkg -i grafana_6.2.5_amd64.deb
 访问grafana 
 
     http://<服务器IP>:3000
-
+    
     默认用户名和密码： admin/admin
 
-![node_exporter-4.png](./_images/node_exporter-4.png)
-
+![node_exporter-4.png](https://cdn.devopsing.site/2021/20210415230058.png)
 
 ## 获取dashboard模板
 
@@ -80,9 +79,9 @@ sudo dpkg -i grafana_6.2.5_amd64.deb
 
 注: https://grafana.com/dashboards 还有很多的dashboard可以下载
 
-![node_exporter-6.png](./_images/node_exporter-6.png)
+![node_exporter-6.png](https://cdn.devopsing.site/2021/20210415230101.png)
 
 可以直接写入1860，也可以再官网上下载json文件load上去
 这样node_exporter获取的数据就能展示出来了
 
-![node_exporter-5.png](./_images/node_exporter-8.png)
+![node_exporter-5.png](https://cdn.devopsing.site/2021/20210415230104.png)
