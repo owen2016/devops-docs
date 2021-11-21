@@ -6,3 +6,6 @@
 00-Tools/nodeppt/demo/dist/js/chunk-vendors.js.LICENSE.txt
 00-Tools/nodeppt/demo/dist/js/demo.js
 00-Tools/nodeppt/demo/dist/js/demo.js.LICENSE.txt
+vx.json
+vx_notebook/vx_notebook.json
+vx_notebook/notebook.db
