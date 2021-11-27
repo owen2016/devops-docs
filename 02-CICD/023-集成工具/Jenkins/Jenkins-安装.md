@@ -1,4 +1,4 @@
-# Jenkins
+# Jenkins 安装
 
 [TOC]
 
@@ -8,11 +8,9 @@ Jenkins的前身是Hudson, Hudson是SUN公司时期就有的CI工具，后来因
 
 关于Hudson 和Jenkins的恩怨，有兴趣可查阅 https://www.oschina.net/news/63453/hudson-and-jenkins-grievances
 
-## Jenkins 安装
-
 - https://jenkins.io/doc/　－＞　https://jenkins.io/doc/book/installing/
 
-### 环境准备 - JDK 安装
+## 环境准备 - JDK 安装
 
 **注意:** 如果将Jenkins作为Docker 容器运行，这不是必需的
 
@@ -43,7 +41,7 @@ Jenkins依赖java环境， 请先确保java环境已安装好， java安装流�
 
 - 使环境变量生效: `source /etc/profile`
 
-### 1. APT 安装
+## 1. APT 安装
 
 - https://pkg.jenkins.io/debian/
 
@@ -69,7 +67,7 @@ JENKINS_GROUP=root
 systemctl restart jenkins
 ```
 
-### 2. WAR包方式运行
+## 2. WAR包方式运行
 
 １．安装前准备 Java 8 (either a JRE or Java Development Kit (JDK) is fine)
 
@@ -79,7 +77,7 @@ systemctl restart jenkins
 
 ４．浏览器打开http://localhost:8080
 
-### 3.Docker 方式运行
+## 3.Docker 方式运行
 
 ``` shell
 sudo docker run \
