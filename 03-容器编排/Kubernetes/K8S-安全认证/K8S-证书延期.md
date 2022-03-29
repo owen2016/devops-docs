@@ -12,13 +12,13 @@
 
 2. 备份证书  `cp -rp /etc/kubernetes/ /etc/back-kubernetes-up/`
 
-3. 生成集群当前配置文件 `kubeadm config view > /data/devops/cluster.yaml`
+3. 生成集群当前配置文件 `kubeadm config view > ./cluster.yaml`
 
-4. 手动更新证书 `kubeadm alpha certs renew all --config=/data/devops/cluster.yaml`
+4. 手动更新证书 `kubeadm alpha certs renew all --config=./cluster.yaml`
 
 5. 更新配置文件`/etc/kubernetes/*.conf`, 主要是为了更新`/etc/kubernetes/kubelet.conf`
 
-    `kubeadm init phase kubeconfig all --config=/data/devops/cluster.yaml`
+    `kubeadm init phase kubeconfig all --config=./cluster.yaml`
 
 6. 检查证书过期时间是否更新 `kubeadm alpha certs check-expiration`
 
