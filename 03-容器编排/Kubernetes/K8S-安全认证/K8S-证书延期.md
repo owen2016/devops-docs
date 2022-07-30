@@ -10,7 +10,7 @@
 
     ![](./_images/k8s-certs.png)
 
-2. 备份证书  `cp -rp /etc/kubernetes/ /etc/back-kubernetes-up/`
+2. 备份证书  `cp -rp /etc/kubernetes/ /etc/kubernetes-bak/`
 
 3. 生成集群当前配置文件 `kubeadm config view > ./cluster.yaml`
 
