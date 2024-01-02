@@ -1,0 +1,5 @@
+vnote_backup_file_826537664 /home/user/Documents/vnote_notebooks/DevOps-Book/1.Linux/haproxy.md
+# haproxy
+
+2、企业级负载集群（其中主要学习nginx、haproxy、lvs要对主要知识熟练掌握，对负载均衡算法有清晰认识，）
+3、企业级高可用集群 （其中需要对keepalived，heartbeat等进行深入讲解）

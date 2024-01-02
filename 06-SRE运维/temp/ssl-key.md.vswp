@@ -1,0 +1,86 @@
+vnote_backup_file_826537664 /home/user/Documents/vnote_notebooks/DevOps-Book/1.Linux/证书.md
+# ssl-key
+
+1. SSL：安全套接字层 Secure Socket Layer的缩写
+
+2. TLS：传输层安全协议 Transport Layer Security的缩写  ，SSL的继任者
+
+3. KEY：通常指私钥  
+
+4. CSR：是Certificate Signing Request的缩写，即证书签名请求，生成证书时要把这个提交给权威的证书颁发机构
+
+5. CRT：即 certificate的缩写，即证书
+
+6. X.509：X.509是由国际电信联盟（ITU-T）制定的数字证书标准  
+对X.509证书来说，认证者总是CA或由CA指定的人，一份X.509证书是一些标准字段的集合，这些字段包含有关用户或设备及其相应公钥的信息   
+X.509的证书文件，一般以.crt结尾，根据该文件的内容编码格式，可以分为以下二种格式：  
+PEM - Privacy Enhanced Mail,打开看文本格式,以"-----BEGIN..."开头, "-----END..."结尾,内容是BASE64编码 ，Apache和*NIX服务器偏向于使用这种编码格式  
+DER - Distinguished Encoding Rules,打开看是二进制格式,不可读.Java和Windows服务器偏向于使用这种编码格式   
+
+7. OpenSSL：是一个安全套接字层密码库，囊括主要的密码算法、常用的密钥和证书封装管理功能及SSL协议，并提供丰富的应用程序供测试或其它目的使用
+
+
+https://www.cnblogs.com/guogangj/p/4118605.html
+
+
+https证书pfx 生成 pem,crt,key
+        (1)将.pfx格式的证书转换为.pem文件格式:
+
+   openssl pkcs12 -in xxx.pfx -nodes -out server.pem
+
+        (2)从.pem文件中导出私钥server.key：
+
+   openssl rsa -in server.pem -out server.key
+
+        (3)从.pem文件中导出证书server.crt　
+
+   openssl x509 -in server.pem -out server.crt
+
+
+
+https://stackoverflow.com/questions/3542091/snk-vs-code-signing-certificate#:~:text=A%20PFX%20is%20simply%20a%20password-protected%20version%20of,of%20the%20developers%2C%20then%20they%20are%20equally%20%22secure%22.
+
+https://blog.51cto.com/wushank/1915795
+
+https://help.aliyun.com/knowledge_detail/42214.html
+
+https://www.cnblogs.com/xq1314/archive/2017/12/05/7987216.html
+
+
+https://www.cnblogs.com/cuimiemie/p/6442685.html
+
+https://liyangkai.com/2019110201/
+
+https://blog.csdn.net/xiangguiwang/article/details/76400805
+
+
+https://stackoverflow.com/questions/20367694/whats-the-difference-between-ppk-and-pem-where-pem-is-stored-in-amazons-ec2#:~:text=The%20differences%20between%20.pem%20and%20.ppk%20are%20the,putty%2Fcygwin%29%20are%20more%20into%20the%20.ppk%20file%20format.
+
+
+## RSA &&DSA
+X.509证书标准支持三种不对称加密算法：RSA, DSA, Diffie-Hellman algorithms。最常用的是RSA算法
+
+
+https://www.shangyang.me/2017/05/27/encrypt-rsa-x509/
+
+https://www.cnblogs.com/ifantastic/p/3984544.html
+
+
+ssh 公钥格式
+
+https://blog.csdn.net/weixin_34051201/article/details/92480568
+
+
+https://blog.csdn.net/zhixingheyi_tian/article/details/94438625
+
+https://blog.csdn.net/slikel/article/details/84288936
+
+https://blog.csdn.net/qq_37049781/article/details/84837342
+
+https://www.cnblogs.com/lan1x/p/5872915.html
+
+
+https://yq.aliyun.com/articles/749771?spm=a2c4e.11155472.0.0.5a1353d7EfPTog
+
+
+https://www.xuexila.com/it/wangluoanquan/c87025.html

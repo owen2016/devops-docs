@@ -1,0 +1,10 @@
+vnote_backup_file_826537664 /home/user/Documents/vnote_notebooks/DevOps-Book/Monitor/Prometheus/exporter.md
+# exporter
+
+https://yunlzheng.gitbook.io/prometheus-book/part-ii-prometheus-jin-jie/exporter/what-is-prometheus-exporter
+
+Memcached exporter 负责收集 Memcached 信息
+MySQL server exporter 负责收集 Mysql Sever 信息
+MongoDB exporter 负责收集 MongoDB 信息
+InfluxDB exporter 负责收集 InfluxDB 信息
+JMX exporter 负责收集 Java 虚拟机信息

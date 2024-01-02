@@ -1,0 +1,84 @@
+<flow-definition plugin="workflow-job@2.36">
+    <actions>
+        <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@1.6.0" />
+        <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.6.0">
+            <jobProperties>
+                <string>org.jenkinsci.plugins.workflow.job.properties.DisableConcurrentBuildsJobProperty</string>
+                <string>jenkins.model.BuildDiscarderProperty</string>
+            </jobProperties>
+            <triggers />
+            <parameters>
+                <string>Build_Env</string>
+                <string>Deploy_To</string>
+            </parameters>
+            <options />
+        </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+    </actions>
+    <description />
+    <keepDependencies>false</keepDependencies>
+    <properties>
+        <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.13" />
+        <com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty plugin="gitlab-plugin@1.5.13">
+            <gitLabConnection />
+        </com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty>
+        <jenkins.model.BuildDiscarderProperty>
+            <strategy class="hudson.tasks.LogRotator">
+                <daysToKeep>-1</daysToKeep>
+                <numToKeep>10</numToKeep>
+                <artifactDaysToKeep>-1</artifactDaysToKeep>
+                <artifactNumToKeep>-1</artifactNumToKeep>
+            </strategy>
+        </jenkins.model.BuildDiscarderProperty>
+        <org.jenkinsci.plugins.workflow.job.properties.DisableConcurrentBuildsJobProperty />
+        <hudson.model.ParametersDefinitionProperty>
+            <parameterDefinitions>
+                <hudson.model.ChoiceParameterDefinition>
+                    <name>Build_Env</name>
+                    <description>npm build parameter</description>
+                    <choices class="java.util.Arrays$ArrayList">
+                        <a class="string-array">
+                            <string>staging</string>
+                            <string>prod</string>
+                            <string>dev</string>
+                        </a>
+                    </choices>
+                </hudson.model.ChoiceParameterDefinition>
+                <hudson.model.ChoiceParameterDefinition>
+                    <name>Deploy_To</name>
+                    <description>select a server where you want to deploy</description>
+                    <choices class="java.util.Arrays$ArrayList">
+                        <a class="string-array">
+                            <string>N/A</string>
+                            <string>172.20.61.35</string>
+                            <string>192.168.161.34</string>
+                            <string>192.168.161.49</string>
+                        </a>
+                    </choices>
+                </hudson.model.ChoiceParameterDefinition>
+            </parameterDefinitions>
+        </hudson.model.ParametersDefinitionProperty>
+    </properties>
+    <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@2.80">
+        <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.1">
+            <configVersion>2</configVersion>
+            <userRemoteConfigs>
+                <hudson.plugins.git.UserRemoteConfig>
+                    <url>git@git.augmentum.com.cn:mc/mc-web.git</url>
+                    <credentialsId>gitlab-private-key</credentialsId>
+                </hudson.plugins.git.UserRemoteConfig>
+            </userRemoteConfigs>
+            <branches>
+                <hudson.plugins.git.BranchSpec>
+                    <name>*/develop</name>
+                </hudson.plugins.git.BranchSpec>
+            </branches>
+            <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+            <submoduleCfg class="list" />
+            <extensions />
+        </scm>
+        <scriptPath>Jenkinsfile</scriptPath>
+        <lightweight>true</lightweight>
+    </definition>
+    <triggers />
+    <disabled>false</disabled>
+</flow-definition>

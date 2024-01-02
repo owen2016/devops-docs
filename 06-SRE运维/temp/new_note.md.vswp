@@ -1,0 +1,46 @@
+vnote_backup_file_826537664 /home/user/Documents/vnote_notebooks/DevOps-Book/1.Linux/gitlab-ci.md
+variables:
+  Mode: ""
+
+stages:
+  - deploy
+
+deploy_without_docker:
+  stage: deploy
+  script:
+   - ./deploy.sh
+  only:
+    - master
+
+.deploy_template: &deploy_template
+  stage: deploy
+  script:
+    - p=`pwd`
+    - echo "WorkDir:$p" 
+    - docker-compose build
+    - docker-compose up -d
+  after_script:
+    - docker images | grep none | awk '{print $3}' | xargs docker rmi -f
+  only:
+    - master
+
+deploy_with_docker:
+  <<: *deploy_template
+  tags:
+    - docsify
+  only:
+   variables:
+    - $Mode == 'docker'
+
+
+```
+  #！/usr/bin/env bash
+  echo "WorkDir:$PWD" 
+  PIDS=`ps -ef |grep docsify |grep -v grep | awk '{print $2}'`
+  if [ "$PIDS" != "" ]; then
+   echo "docsify is runing!"
+  else
+   echo "starting docsify!"
+   nohup docsify serve . --port 3333 >/dev/null 2>&1 &
+  fi
+```
