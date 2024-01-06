@@ -6,7 +6,7 @@
 
 - <https://minikube.sigs.k8s.io/docs/>
 
-Minikube 用于快速在本地搭建 Kubernetes 单节点集群环境，它对硬件资源没有太高的要求，方便开发人员学习试用，或者进行日常的开发。
+Minikube是一个轻量级的Kubernetes集群，用于在个人计算机上进行本地开发和测试。它是Kubernetes社区为帮助开发者和学习者更好地学习和体验Kubernetes功能而推出的工具。通过Minikube，用户可以在个人计算机上快速构建和启动Kubernetes集群，从而进行本地开发和测试。Minikube支持在macOS、Linux和Windows平台上运行，并可以使用各类本地虚拟化环境作为驱动。
 
 其支持大部分kubernetes的功能，列表如下
 
