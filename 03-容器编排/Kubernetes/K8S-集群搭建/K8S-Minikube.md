@@ -47,6 +47,8 @@ Minikube 用于快速在本地搭建 Kubernetes 单节点集群环境，它对�
 
 `curl -Lo minikube https://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v1.13.0/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/`
 
+`curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64  && sudo install minikube-linux-amd64 /usr/local/bin/minikube`
+
 ### 下载Kubectl
 
 - <https://kubernetes.io/docs/tasks/tools/install-kubectl/>
