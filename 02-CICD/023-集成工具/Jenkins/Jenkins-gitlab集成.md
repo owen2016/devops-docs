@@ -51,8 +51,7 @@ pipeline {
 }
 ```
 
-- gitLabConnection 是和GitLab接续的名称。根据用户的权限，可以在View Configuration > General > GitLab
-- Connection 处看到接续的情报。GitLab名称的设定是在jenkins管理>系统设定>Gitlab当中设置详细的gitlab url和token
+- gitLabConnection 是和GitLab接续的名称。GitLab名称的设定是在jenkins管理>系统设定>Gitlab当中设置详细的gitlab url和token
 - updateGitlabCommitStatus
     - name: build 名称
     - state: pending, running, canceled, success, failed 
